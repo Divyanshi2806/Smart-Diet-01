@@ -1,0 +1,735 @@
+/* Base Styles & Variables */
+:root {
+    --primary: #45a764;
+    --primary-dark: #388a40;
+    --secondary: #6BBF70;
+    --secondary-dark: #5AA660;
+    --accent: #FF6B6B;
+    --dark: #2c502e;
+    --light: #F8F9FA;
+    --gray: #8C8CA1;
+    --doctor: #4aa571;
+    --patient: #6BBF70;
+    --user: #FF9F43;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1e3118 0%, #193216 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: var(--dark);
+}
+
+/* Container & Layout */
+.auth-container {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    min-height: 650px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.role-side {
+    flex: 1;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-side {
+    flex: 1.2;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    background: var(--light);
+}
+
+/* Role Selection Styles */
+.role-content {
+    z-index: 2;
+    position: relative;
+}
+
+.role-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.role-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 40px;
+    max-width: 400px;
+}
+
+.role-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 350px;
+}
+
+.role-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.role-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.role-card.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: white;
+}
+
+.role-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.doctor .role-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.patient .role-icon {
+    background: rgba(107, 191, 112, 0.3);
+}
+
+.user .role-icon {
+    background: rgba(255, 159, 67, 0.3);
+}
+
+.role-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.role-info p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.graphic-container {
+    width: 300px;
+    height: 150px;
+    margin: 30px auto;
+    position: relative;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.shape-1 {
+    width: 100px;
+    height: 100px;
+    top: 10px;
+    left: 10px;
+}
+
+.shape-2 {
+    width: 70px;
+    height: 70px;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* Form Styles */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.logo i {
+    font-size: 2rem;
+}
+
+/* Toggle between Login and Sign Up */
+.auth-toggle {
+    display: flex;
+    background: var(--light);
+    border-radius: 50px;
+    padding: 5px;
+    margin-bottom: 30px;
+    width: fit-content;
+    border: 1px solid #E6E6F0;
+}
+
+.toggle-option {
+    padding: 10px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    color: var(--gray);
+}
+
+.toggle-option.active {
+    background: var(--primary);
+    color: white;
+}
+
+.form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.role-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.doctor-badge {
+    background: var(--doctor);
+    color: white;
+}
+
+.patient-badge {
+    background: var(--patient);
+    color: white;
+}
+
+.user-badge {
+    background: var(--user);
+    color: white;
+}
+
+.form-subtitle {
+    color: var(--gray);
+    margin-bottom: 30px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid #E6E6F0;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+    cursor: pointer;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.forgot-password {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.submit-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 111, 165, 0.3);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: var(--gray);
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #E6E6F0;
+}
+
+.divider-text {
+    padding: 0 15px;
+    font-size: 0.9rem;
+}
+
+.social-login {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #E6E6F0;
+    background: white;
+    color: var(--dark);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.social-btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.auth-prompt {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.auth-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Styles */
+.dashboard {
+    display: none;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 700px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.dashboard-header {
+    background: var(--primary);
+    color: white;
+    padding: 25px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.dashboard-title i {
+    font-size: 2rem;
+}
+
+.dashboard-title h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.user-details h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.user-details p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-content {
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.dashboard-card {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.doctor .card-icon {
+    background: var(--doctor);
+}
+
+.patient .card-icon {
+    background: var(--patient);
+}
+
+.user .card-icon {
+    background: var(--user);
+}
+
+.card-header h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.card-content {
+    color: var(--dark);
+}
+
+.card-content p {
+    margin-bottom: 15px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-item {
+    background: white;
+    padding: 15px;
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.doctor .stat-value {
+    color: var(--doctor);
+}
+
+.patient .stat-value {
+    color: var(--patient);
+}
+
+.user .stat-value {
+    color: var(--user);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.appointments, .prescriptions {
+    grid-column: 1 / -1;
+}
+
+.appointment-list, .prescription-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.appointment-item, .prescription-item {
+    background: white;
+    padding: 15px;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--primary);
+}
+
+.appointment-info h3, .prescription-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.appointment-info p, .prescription-info p {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.appointment-status, .prescription-status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-upcoming {
+    background: #FFF3CD;
+    color: #856404;
+}
+
+.status-completed {
+    background: #D1ECF1;
+    color: #13600c;
+}
+
+.status-active {
+    background: #D4EDDA;
+    color: #155724;
+}
+
+/* Form States */
+.form-page {
+    display: none;
+}
+
+.form-page.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.error-message {
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.success-message {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .auth-container {
+        flex-direction: column;
+        max-width: 500px;
+    }
+    
+    .role-side {
+        padding: 30px;
+    }
+    
+    .form-side {
+        padding: 40px 30px;
+    }
+    
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .role-side {
+        padding: 25px 20px;
+    }
+    
+    .form-side {
+        padding: 30px 20px;
+    }
+    
+    .role-title {
+        font-size: 1.8rem;
+    }
+    
+    .form-title {
+        font-size: 1.7rem;
+    }
+    
+    .dashboard-header {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .dashboard-content {
+        padding: 20px;
+    }
+    
+    .auth-toggle {
+        width: 100%;
+        justify-content: center;
+    }
+}

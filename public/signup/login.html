@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartDiet| Role-Based Authentication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <!-- Authentication Container -->
+    <div class="auth-container" id="auth-container">
+        <!-- Role Selection Side -->
+        <div class="role-side">
+            <div class="role-content">
+                <h1 class="role-title">Welcome to SmartDiet</h1>
+                <p class="role-subtitle">Select your role to access the platform</p>
+                
+                <div class="role-cards">
+                    <div class="role-card doctor active" data-role="doctor">
+                        <div class="role-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="role-info">
+                            <h3>Doctor</h3>
+                            <p>Access patient records, manage appointments, and prescribe treatments</p>
+                        </div>
+                    </div>
+                    
+                    <div class="role-card patient" data-role="patient">
+                        <div class="role-icon">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <div class="role-info">
+                            <h3>Patient</h3>
+                            <p>Book appointments, view medical history, and communicate with doctors</p>
+                        </div>
+                    </div>
+                    
+                    <div class="role-card user" data-role="user">
+                        <div class="role-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="role-info">
+                            <h3>Regular User</h3>
+                            <p>Access general health information and wellness resources</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="graphic-container">
+                    <div class="floating-shape shape-1"></div>
+                    <div class="floating-shape shape-2"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Form Side -->
+        <div class="form-side">
+            <div class="form-content">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>SmartDiet</span>
+                </div>
+                
+                <!-- Toggle between Login and Sign Up -->
+                <div class="auth-toggle">
+                    <div class="toggle-option active" data-action="login">Sign In</div>
+                    <div class="toggle-option" data-action="signup">Sign Up</div>
+                </div>
+                
+                <!-- Doctor Login Form -->
+                <div id="doctor-login" class="form-page active">
+                    <h2 class="form-title">
+                        Doctor Login
+                        <span class="role-badge doctor-badge">Medical Professional</span>
+                    </h2>
+                    <p class="form-subtitle">Access your medical dashboard</p>
+                    
+                    <form class="form" id="doctor-login-form">
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-login-email">Medical ID or Email</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user-md input-icon"></i>
+                                <input type="text" id="doctor-login-email" class="form-input" placeholder="Enter your medical ID or email" required>
+                            </div>
+                            <div class="error-message" id="doctor-login-email-error">Please enter a valid medical ID or email</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-login-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="doctor-login-password" class="form-input" placeholder="Enter your password" required>
+                                <i class="fas fa-eye password-toggle" id="doctor-login-password-toggle"></i>
+                            </div>
+                            <div class="error-message" id="doctor-login-password-error">Password must be at least 6 characters</div>
+                        </div>
+                        
+                        <div class="remember-forgot">
+                            <div class="remember-me">
+                                <input type="checkbox" id="doctor-remember">
+                                <label for="doctor-remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Access Medical Dashboard</button>
+                        
+                        <div class="auth-prompt">
+                            Don't have an account? <a href="#" class="auth-link" data-action="signup">Sign up</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Doctor Sign Up Form -->
+                <div id="doctor-signup" class="form-page">
+                    <h2 class="form-title">
+                        Doctor Registration
+                        <span class="role-badge doctor-badge">Medical Professional</span>
+                    </h2>
+                    <p class="form-subtitle">Create your medical professional account</p>
+                    
+                    <form class="form" id="doctor-signup-form">
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-signup-name">Full Name</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" id="doctor-signup-name" class="form-input" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="error-message" id="doctor-signup-name-error">Please enter your full name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-signup-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="doctor-signup-email" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            <div class="error-message" id="doctor-signup-email-error">Please enter a valid email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-signup-medid">Medical ID</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-id-card input-icon"></i>
+                                <input type="text" id="doctor-signup-medid" class="form-input" placeholder="Enter your medical license ID" required>
+                            </div>
+                            <div class="error-message" id="doctor-signup-medid-error">Please enter your medical ID</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-signup-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="doctor-signup-password" class="form-input" placeholder="Create a password" required>
+                                <i class="fas fa-eye password-toggle" id="doctor-signup-password-toggle"></i>
+                            </div>
+                            <div class="error-message" id="doctor-signup-password-error">Password must be at least 8 characters with uppercase, lowercase, and number</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="doctor-signup-confirm">Confirm Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="doctor-signup-confirm" class="form-input" placeholder="Confirm your password" required>
+                            </div>
+                            <div class="error-message" id="doctor-signup-confirm-error">Passwords do not match</div>
+                        </div>
+                        
+                        <div class="remember-me">
+                            <input type="checkbox" id="doctor-agree-terms" required>
+                            <label for="doctor-agree-terms">I agree to the <a href="#" class="forgot-password">Terms of Service</a> and <a href="#" class="forgot-password">Privacy Policy</a></label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Create Medical Account</button>
+                        
+                        <div class="auth-prompt">
+                            Already have an account? <a href="#" class="auth-link" data-action="login">Sign in</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Patient Login Form -->
+                <div id="patient-login" class="form-page">
+                    <h2 class="form-title">
+                        Patient Login
+                        <span class="role-badge patient-badge">Patient Portal</span>
+                    </h2>
+                    <p class="form-subtitle">Access your health records and appointments</p>
+                    
+                    <form class="form" id="patient-login-form">
+                        <div class="form-group">
+                            <label class="form-label" for="patient-login-email">Patient ID or Email</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user-injured input-icon"></i>
+                                <input type="text" id="patient-login-email" class="form-input" placeholder="Enter your patient ID or email" required>
+                            </div>
+                            <div class="error-message" id="patient-login-email-error">Please enter a valid patient ID or email</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="patient-login-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="patient-login-password" class="form-input" placeholder="Enter your password" required>
+                                <i class="fas fa-eye password-toggle" id="patient-login-password-toggle"></i>
+                            </div>
+                            <div class="error-message" id="patient-login-password-error">Password must be at least 6 characters</div>
+                        </div>
+                        
+                        <div class="remember-forgot">
+                            <div class="remember-me">
+                                <input type="checkbox" id="patient-remember">
+                                <label for="patient-remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Access Patient Portal</button>
+                        
+                        <div class="auth-prompt">
+                            Don't have an account? <a href="#" class="auth-link" data-action="signup">Sign up</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Patient Sign Up Form -->
+                <div id="patient-signup" class="form-page">
+                    <h2 class="form-title">
+                        Patient Registration
+                        <span class="role-badge patient-badge">Patient Portal</span>
+                    </h2>
+                    <p class="form-subtitle">Create your patient account</p>
+                    
+                    <form class="form" id="patient-signup-form">
+                        <div class="form-group">
+                            <label class="form-label" for="patient-signup-name">Full Name</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" id="patient-signup-name" class="form-input" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="error-message" id="patient-signup-name-error">Please enter your full name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="patient-signup-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="patient-signup-email" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            <div class="error-message" id="patient-signup-email-error">Please enter a valid email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="patient-signup-dob">Date of Birth</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-calendar input-icon"></i>
+                                <input type="date" id="patient-signup-dob" class="form-input" required>
+                            </div>
+                            <div class="error-message" id="patient-signup-dob-error">Please enter your date of birth</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="patient-signup-phone">Phone Number</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="tel" id="patient-signup-phone" class="form-input" placeholder="Enter your phone number" required>
+                            </div>
+                            <div class="error-message" id="patient-signup-phone-error">Please enter a valid phone number</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="patient-signup-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="patient-signup-password" class="form-input" placeholder="Create a password" required>
+                                <i class="fas fa-eye password-toggle" id="patient-signup-password-toggle"></i>
+                            </div>
+                            <div class="error-message" id="patient-signup-password-error">Password must be at least 8 characters with uppercase, lowercase, and number</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="patient-signup-confirm">Confirm Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="patient-signup-confirm" class="form-input" placeholder="Confirm your password" required>
+                            </div>
+                            <div class="error-message" id="patient-signup-confirm-error">Passwords do not match</div>
+                        </div>
+                        
+                        <div class="remember-me">
+                            <input type="checkbox" id="patient-agree-terms" required>
+                            <label for="patient-agree-terms">I agree to the <a href="#" class="forgot-password">Terms of Service</a> and <a href="#" class="forgot-password">Privacy Policy</a></label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Create Patient Account</button>
+                        
+                        <div class="auth-prompt">
+                            Already have an account? <a href="#" class="auth-link" data-action="login">Sign in</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Regular User Login Form -->
+                <div id="user-login" class="form-page">
+                    <h2 class="form-title">
+                        User Login
+                        <span class="role-badge user-badge">Wellness Portal</span>
+                    </h2>
+                    <p class="form-subtitle">Access health information and resources</p>
+                    
+                    <form class="form" id="user-login-form">
+                        <div class="form-group">
+                            <label class="form-label" for="user-login-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="email" id="user-login-email" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            <div class="error-message" id="user-login-email-error">Please enter a valid email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="user-login-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="user-login-password" class="form-input" placeholder="Enter your password" required>
+                                <i class="fas fa-eye password-toggle" id="user-login-password-toggle"></i>
+                            </div>
+                            <div class="error-message" id="user-login-password-error">Password must be at least 6 characters</div>
+                        </div>
+                        
+                        <div class="remember-forgot">
+                            <div class="remember-me">
+                                <input type="checkbox" id="user-remember">
+                                <label for="user-remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Access Wellness Portal</button>
+                        
+                        <div class="auth-prompt">
+                            Don't have an account? <a href="#" class="auth-link" data-action="signup">Sign up</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Regular User Sign Up Form -->
+                <div id="user-signup" class="form-page">
+                    <h2 class="form-title">
+                        User Registration
+                        <span class="role-badge user-badge">Wellness Portal</span>
+                    </h2>
+                    <p class="form-subtitle">Create your wellness account</p>
+                    
+                    <form class="form" id="user-signup-form">
+                        <div class="form-group">
+                            <label class="form-label" for="user-signup-name">Full Name</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" id="user-signup-name" class="form-input" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="error-message" id="user-signup-name-error">Please enter your full name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="user-signup-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="user-signup-email" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            <div class="error-message" id="user-signup-email-error">Please enter a valid email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="user-signup-age">Age</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-birthday-cake input-icon"></i>
+                                <input type="number" id="user-signup-age" class="form-input" placeholder="Enter your age" min="1" max="120" required>
+                            </div>
+                            <div class="error-message" id="user-signup-age-error">Please enter a valid age</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="user-signup-gender">Gender</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-venus-mars input-icon"></i>
+                                <select id="user-signup-gender" class="form-input" required>
+                                    <option value="">Select your gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer-not-to-say">Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="error-message" id="user-signup-gender-error">Please select your gender</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="user-signup-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="user-signup-password" class="form-input" placeholder="Create a password" required>
+                                <i class="fas fa-eye password-toggle" id="user-signup-password-toggle"></i>
+                            </div>
+                            <div class="error-message" id="user-signup-password-error">Password must be at least 8 characters with uppercase, lowercase, and number</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="user-signup-confirm">Confirm Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="user-signup-confirm" class="form-input" placeholder="Confirm your password" required>
+                            </div>
+                            <div class="error-message" id="user-signup-confirm-error">Passwords do not match</div>
+                        </div>
+                        
+                        <div class="remember-me">
+                            <input type="checkbox" id="user-agree-terms" required>
+                            <label for="user-agree-terms">I agree to the <a href="#" class="forgot-password">Terms of Service</a> and <a href="#" class="forgot-password">Privacy Policy</a></label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Create Wellness Account</button>
+                        
+                        <div class="auth-prompt">
+                            Already have an account? <a href="#" class="auth-link" data-action="login">Sign in</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!--HTML Part-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Diet - Recipes</title>
+  <link rel="stylesheet" href="recipes.css">
+</head>
+<script>
+  const recipes = {
+    "chickpea": {
+      title: "Chickpea & Avocado Salad",
+      img: "images/chickpeasalad.jpg",
+      desc: "A creamy, protein-rich salad with fresh avocado and chickpeas.",
+      ingredients: [
+      "1 cup boiled chickpeas, 1 ripe avocado (diced), 1/2 cup cherry tomatoes (halved), 1/2 cucumber (chopped), 1 tbsp olive oil, 1 tsp lemon juice ,Salt & pepper to taste",
+      ],
+      steps: [
+        "In a large bowl, mash half of the avocado (for creaminess).",
+        "Add chickpeas, tomatoes, cucumber, and remaining avocado.",
+        "Drizzle olive oil + lemon juice.",
+        "Toss and serve fresh."
+      ]
+    },
+    "quinoa": {
+      title: "Mediterranean Quinoa Salad",
+      img: "images/quinoasalad.jpg",
+      desc: "Vegan • High Protein • 286 kcal per serving",
+      ingredients: [
+        "1 cup cooked quinoa, 1 cucumber (chopped), 1 tomato (chopped), 1/4 cup black olives (sliced), 2 tbsp parsley (chopped), 2 tbsp olive oil, Juice of 1 lemon, Salt & black pepper to taste",
+      ],
+      steps: [
+        "Cook quinoa and let it cool.",
+        "In a bowl, mix cucumber, tomato, olives, parsley.",
+        "Add quinoa, drizzle olive oil + lemon juice.",
+        "Toss well, season with salt & pepper.",
+      ]
+    },
+    "rainbow": {
+      title: "Rainbow Crunch Salad with Peanut Dressing",
+      img: "images/rainbow.jpg",
+      desc: "Vegan • Fiber-Rich • 310 kcal per serving",
+      ingredients: [
+        "1 cup shredded red cabbage,1 cup shredded carrots,1 bell pepper (any color, sliced),1/4 cup roasted peanuts,2 tbsp sesame seeds",
+        "(For Dressing)",
+        "2 tbsp peanut butter,1 tbsp soy sauce, 1 tbsp lemon juice, 1 tsp honey/maple syrup, 2 tbsp warm water (to thin)"
+      ],
+      steps: [
+        "Whisk dressing ingredients until smooth.",
+        "Mix cabbage, carrots, and bell pepper in a bowl.",
+        "Pour dressing, toss well.",
+        "Garnish with peanuts & sesame seeds.",
+      ]
+    },
+    "bananasmoothie": {
+      title: "Banana Peanut Butter Smoothie",
+      img: "images/Bananasmoothie.jpg",
+      desc: "High Protein • Filling • 270 kcal",
+      ingredients: [
+        "1 ripe banana, 1 tbsp peanut butter (unsweetened), 1 cup soy/almond milk, 1 tsp flax seeds, 1/2 tsp cinnamon",
+      ],
+      steps: [
+        "Blend banana + peanut butter + milk until creamy.",
+        "Sprinkle flax seeds & cinnamon before serving.",
+      ]
+    },
+    "berryoatsmoothie": {
+      title: "Berry Oats Smoothie",
+      img: "images/Blueberrysmoothie.jpg",
+      desc: "Antioxidant • Fiber • 310 kcal",
+      ingredients: [
+        "1/2 cup oats (soaked in warm water 10 min), 1/2 cup mixed berries (strawberry, blueberry, raspberry), 1/2 cup yogurt (plant yogurt for vegan), 1 tsp honey/maple syrup, 1/2 cup almond milk"
+      ],
+      steps: [
+        "Blend oats + berries + yogurt + milk.",
+        "Sweeten with honey if needed.",
+      ]
+    },
+    "mangospinachsmoothie": {
+      title: "Mango Spinach Smoothie",
+      img: "images/mangospinachsmoothie.jpg",
+      desc: "Refreshing • Iron-Rich • 240 kcal",
+      ingredients: [
+        "1 cup mango chunks (fresh/frozen), 1 cup spinach, 1/2 cup orange juice, 1/2 cup coconut water, 1 tbsp hemp seeds"
+      ],
+      steps: [
+        "Blend all ingredients until smooth.",
+        "Serve chilled.",
+      ]
+    },
+    "carrotgingersoup": {
+      title: "Carrot-Ginger Soup",
+      img: "images/carrotgingersoup.png",
+      desc: "Boosts Immunity • Aids Digestion • 120 kcal per bowl",
+      ingredients: [
+      "2 medium carrots (chopped), 1 small onion (chopped), 1-inch ginger (grated), 2 garlic cloves (chopped), 1 tsp olive oil 2 cups vegetable stock / water,Salt & pepper to taste",
+      ],
+      steps: [
+        "Heat olive oil, sauté onion, garlic, and ginger until soft.",
+        "Add chopped carrots, sauté 2 mins.",
+        "Pour in vegetable stock, cover & simmer for 15 mins.",
+        "Blend until smooth, season with salt & pepper."
+      ]
+    },
+    "tomatobasilsoup": {
+      title: "Tomato-Basil Soup",
+      img: "images/tomato-basil-soup.jpg",
+      desc: "Antioxidants • Weight Loss • 100 kcal per bowl",
+      ingredients: [
+      "4 medium tomatoes (chopped), 1 small onion (chopped), 2 garlic cloves, 1 tsp olive oil, 1 cup vegetable stock, 4–5 fresh basil leaves (or 1 tsp dried), Salt & pepper to taste",
+      ],
+      steps: [
+        "Heat olive oil, sauté onion & garlic.",
+        "Add tomatoes, cook until soft.",
+        "Add stock, simmer 10 mins.",
+        "Blend smooth, add basil, simmer 2 more mins.",
+        "Season with salt & pepper."
+      ]
+    },
+    "spinachlentilsoup": {
+      title: "Spinach-Lentil Soup",
+      img: "images/spinachlentilsoup.jpg",
+      desc: "High in Protein & Iron • Balances Blood Sugar • 180 kcal per bowl",
+      ingredients: [
+      "1/2 cup red lentils (moong dal/masoor dal), 2 cups spinach (chopped), 1 small onion, 1 tsp cumin seeds, 1 garlic clove, 1 tsp olive oil, 2 cups water/veg stock, Salt & black pepper",
+      ],
+      steps: [
+        "Wash lentils and boil with water/stock until soft.",
+        "In a pan, heat oil, add cumin & garlic, sauté onion.",
+        "Add spinach, cook 2 mins.",
+        "Mix spinach into lentils, simmer 5 mins.",
+        "Blend lightly or leave chunky."
+      ]
+    },
+  };
+
+  function openModal(recipeId) {
+    const recipe = recipes[recipeId];
+    document.getElementById("modalTitle").innerText = recipe.title;
+    document.getElementById("modalImage").src = recipe.img;
+    document.getElementById("modalDescription").innerText = recipe.desc;
+    const ingList = document.getElementById("modalIngredients");
+    ingList.innerHTML = "";
+    recipe.ingredients.forEach(ing => {
+      const li = document.createElement("li");
+      li.innerText = ing;
+      ingList.appendChild(li);
+    });
+    const stepList = document.getElementById("modalSteps");
+    stepList.innerHTML = "";
+    recipe.steps.forEach(step => {
+      const li = document.createElement("li");
+      li.innerText = step;
+      stepList.appendChild(li);
+    });
+
+    document.getElementById("recipeModal").style.display = "flex";
+  }
+  function closeModal() {
+    document.getElementById("recipeModal").style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target === document.getElementById("recipeModal")) {
+      closeModal();
+    }
+  }
+</script>
+<body>
+  <header>
+    <h1><pre>S M A R T  D I E T</pre></h1>
+    <p>Healthy Recipes for Every Goal</p>
+    <nav>
+      <a href="user-dashboard.html">Home</a>
+      <a href="#salads">Salads</a>
+      <a href="#smoothies">Smoothies</a>
+      <a href="#soups">Soups</a>
+    </nav>
+  </header>
+    <section id="salads">
+    <h2 style="text-align:center;">Salads</h2>
+    <div class="recipes-container">
+      <div class="recipe-card" id="salads">
+        <img src="images/chickpeasalad.jpg" alt="Chickpea & Avocado Salad">
+        <h3>Chickpea & Avocado Salad</h3>
+        <p>Vegetarian • Creamy & Filling • 328 kcal per serving</p>
+        <button onclick="openModal('chickpea')">View Details</button>
+      </div>
+      <div class="recipe-card" id="salads">
+        <img src="images/quinoasalad.jpg" height="250" alt="Mediterranean Quinoa Salad">
+        <pre><h3> 
+    Mediterranean Quinoa Salad  </h3></pre>
+        <p>Vegan • High Protein • 286 kcal per serving</p>
+        <button onclick="openModal('quinoa')">View Details</button>
+      </div>
+      <div class="recipe-card" id="salads">
+        <img src="images/rainbow.jpg" alt="Rainbow Crunch Salad">
+        <h3>Rainbow Crunch Salad with Peanut Dressing</h3>
+        <p>Vegan • Fiber-Rich • 310 kcal per serving</p>
+        <button onclick="openModal('rainbow')">View Details</button>
+      </div>
+    </div>
+  </section>
+  <section id="smoothies">
+    <h2 style="text-align:center;">Smoothies</h2>
+    <div class="recipes-container">
+      <div class="recipe-card" id="smoothies">
+        <img src="images/Bananasmoothie.jpg" height="350" alt="Banana Peanut Butter Smoothie">
+        <h3>Banana Peanut Butter Smoothie </h3>
+        <p>High Protein • Filling • 270 kcal</p>
+        <button onclick="openModal('bananasmoothie')">View Details</button>
+      </div>
+      <div class="recipe-card" id="smoothies">
+        <img src="images/Blueberrysmoothie.jpg" height="350" alt="Berry Oats Smoothie">
+        <h3>Berry Oats Smoothie</h3>
+        <p>Antioxidant • Fiber • 310 kcal</p>
+        <button onclick="openModal('berryoatsmoothie')">View Details</button>
+      </div>
+      <div class="recipe-card" id="smoothies">
+        <img src="images/mangospinachsmoothie.jpg" height="350" alt="Mango Spinach Smoothie">
+        <h3>Mango Spinach Smoothie</h3>
+        <p>Refreshing • Iron-Rich • 240 kcal</p>
+        <button onclick="openModal('mangospinachsmoothie')">View Details</button>
+      </div>
+    </div>
+  </section>
+  <section id="soups">
+    <h2 style="text-align:center;">Soups</h2>
+    <div class="recipes-container">
+      <div class="recipe-card" id="soups">
+        <img src="images/carrotgingersoup.png" height="300" alt="Carrot-Ginger Soup">
+        <h3>Carrot-Ginger Soup</h3>
+        <p>Boosts Immunity • Aids Digestion • 120 kcal per bowl</p>
+        <button onclick="openModal('carrotgingersoup')">View Details</button>
+      </div>
+      <div class="recipe-card" id="soups">
+        <img src="images/tomato-basil-soup.jpg" height="300" width="250" alt="Tomato-Basil Soup">
+        <h3>Tomato-Basil Soup</h3>
+        <p>Antioxidants • Weight Loss • 100 kcal per bowl</p>
+        <button onclick="openModal('tomatobasilsoup')">View Details</button>
+      </div>
+      <div class="recipe-card" id="soups">
+        <img src="images/spinachlentilsoup.jpg" height="300" width="240" alt="Spinach-Lentil Soup">
+        <h3>Spinach-Lentil Soup</h3>
+        <p>High in Protein & Iron • Balances Blood Sugar • 180 kcal per bowl</p>
+        <button onclick="openModal('spinachlentilsoup')">View Details</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="user-dashboard.html" class="back-btn">⬅ Back to Home</a>
+    <p style="margin-top:10px;">&copy; 2025 Smart Diet. All rights reserved.</p>
+  </footer>
+  <div id="recipeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <img id="modalImage" src="" alt="Recipe Image">
+      <p id="modalDescription"></p>
+      <h3>Ingredients:</h3>
+      <ul id="modalIngredients"></ul>
+      <h3>Steps:</h3>
+      <ol id="modalSteps"></ol>
+    </div>
+  </div>
+</body>
+</html>
