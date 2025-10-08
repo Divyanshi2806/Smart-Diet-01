@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness Dashboard</title>
+  <link rel="stylesheet" href="fit.css">
+  <link rel="shortcut icon" href="images/chatbot.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <header class="site-header">
+      <div class="header-content">
+        <h1>
+          <pre>S M A R T  D I E T</pre>
+        </h1>
+        <p class="subtitle">Fitness Dashboard</p>
+        <p class="description">Track calories, workouts, and progress — stay on top of your journey.</p>
+      </div>
+      <nav>
+        <div class="button"><a href="start.html">Back</a></div>
+      </nav>
+    </header>
+
+    <main class="dashboard">
+      <div class="left-column">
+        <section class="streak-section">
+          <h2>Success Streak</h2>
+          <div class="streak-display">
+            <span class="streak-count">5 days</span>
+            <span class="streak-label">Current Streak</span>
+          </div>
+          <div class="calendar" id="calendar">
+          </div>
+        </section>
+      </div>
+      <div class="middle-column">
+        <section class="food-intake">
+          <h2>What I Ate Today</h2>
+          <div class="food-form">
+            <input type="text" id="food-input" placeholder="Add food item...">
+            <button id="add-food">Add</button>
+          </div>
+          <div class="food-list" id="food-list">
+          </div>
+          <div class="nutrition-summary">
+            <h3>Today's Nutrition</h3>
+            <div class="nutrition-facts">
+              <div class="nutrition-item">
+                <span class="label">Calories:</span>
+                <span class="value" id="total-calories">0</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="label">Protein:</span>
+                <span class="value" id="total-protein">0g</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="label">Fat:</span>
+                <span class="value" id="total-fat">0g</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="label">Fiber:</span>
+                <span class="value" id="total-fiber">0g</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Water Glass Tracker</h1>
+          <div class="tracker">
+            <div class="glass">
+              <div class="water" id="water"></div>
+            </div>
+
+            <div class="controls">
+              <label for="goalInput" class="sr-only">Daily goal</label>
+              <input type="number" id="goalInput" min="1" placeholder="Enter daily goal (glasses)" />
+              <button onclick="setGoal()">Set Goal</button>
+
+              <div class="button-group">
+                <button onclick="drinkWater()">+1 Glass</button>
+                <button onclick="removeWater()">-1 Glass</button>
+              </div>
+
+              <div class="stats" id="stats">0 / 8 Glasses</div>
+              <div class="message" id="message" style="display:none;">Yay! You completed your daily task 🎉</div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="right-column">
+        <section class="nutrition-charts">
+          <h2>Weekly Nutrition Overview</h2>
+          <div class="chart-container">
+            <canvas id="calories-chart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="macros-chart"></canvas>
+          </div>
+        </section>
+      </div>git 
+    </main>
+  </div>
+
+  <script src="fit1.js"></script>
+  <script src="fit.js"></script>
+</body>
+
+<footer>
+  <p>&copy; 2025 Smart Diet. All rights reserved.</p>
+</footer>
+
+</html>

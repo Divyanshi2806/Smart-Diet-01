@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="shortcut icon" href="images/chatbot.png" type="image/png">
+  <title>Smart Diet – Dashboard</title>
+  <link rel="stylesheet" href="start.css">
+</head>
+
+<body>
+  <header>
+    <h1>
+      <pre>S M A R T  D I E T</pre>
+    </h1>
+    <p>AI-powered plans and tracking to help you reach your goals faster.</p>
+    <nav>
+      <div class="button">
+        <a href="patient-dashboard.html"> Home</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <main>
+    <section class="features">
+     
+      <a class="feature-card" href="dietplans.html" style="text-decoration:none; color:inherit; ">
+        <h2>Smart Meal Plans</h2>
+        <p>Smart nutrition suggestions designed around your body and lifestyle.</p>
+      </a>
+      <a class="feature-card" href="fit.html" style="text-decoration: none; color:inherit; " >
+        <h2>Fitness Dashboard</h2>
+        <p>Track calories, workouts, and progress — stay on top of your journey.</p>
+      </a>
+      <div class="feedback-container">
+        <h2 class="section-title">Share Your Experience</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">Inspire others — share your journey with Smart Diet.</p>
+
+        <form id="feedbackForm">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" class="form-control" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="message">Your Experience</label>
+            <textarea id="message" class="form-control"
+              placeholder="Share your experience with Smart Diet..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Share Your Story</button>
+        </form>
+        <div class="thank-you" id="thankYou">
+          <i class="fas fa-check-circle"></i>
+          <h3>Thank You For Sharing!</h3>
+          <p>Your experience has been submitted to our community.</p>
+        </div>
+      </div>
+     </div>
+    </section>
+  </main>
+<footer>
+    <p>&copy; 2025 Smart Diet. All rights reserved.</p>
+  </footer>
+  <script src="feedback.js"></script>
+</body>
+</html>

@@ -1,11 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diet Food </title>
+  <link rel="stylesheet" href="user.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 <body>
-    <h1>Patient Dashboard</h1>
+  <header>
+    <h1><pre>S M A R T  D I E T</pre></h1>
+    <p>Eat Healthy • Live Better</p>
+    
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Personalized Diet Plans for You</h2>
+    <p>𝗧𝗿𝗮𝗰𝗸 𝗰𝗮𝗹𝗼𝗿𝗶𝗲𝘀, 𝗱𝗶𝘀𝗰𝗼𝘃𝗲𝗿 𝗵𝗲𝗮𝗹𝘁𝗵𝘆 𝗿𝗲𝗰𝗶𝗽𝗲𝘀, 𝗮𝗻𝗱 𝘀𝘁𝗮𝘆 𝗳𝗶𝘁 𝘄𝗶𝘁𝗵 𝗲𝗮𝘀𝗲..</p>
+    <button onclick="getStarted()">Get Started</button>
+  </section>
+
+  <section id="features">
+    <h2 style="text-align:center;">Features</h2>
+    <div class="features">
+      <div class="card">
+        <h3>🍎 Personalized Diet</h3>
+        <p>Custom meal plans based on your health goals.</p>
+      </div>
+      <div class="card">
+        <h3>🔥 Calorie Tracker</h3>
+        <p>Keep track of your daily calorie intake easily.</p>
+      </div>
+      <div class="card">
+        <h3>🥗 Healthy Recipes</h3>
+        <p>Discover tasty and nutritious recipes.</p>
+      </div>
+      <div class="card">
+        <h3>🤖 AI Suggestions</h3>
+        <p>Smart recommendations for your meals.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="recipes">
+    <h2 style="text-align:center;">Popular Diet Recipes</h2>
+    <div class="recipes">
+      <div class="card">
+        <img src="images/salad.jpg" alt="Salad">
+        <h3>Fresh Salad</h3>
+        <p>120 Calories • Low Carb</p>
+        <button></button>
+      </div>
+      <div class="card">
+        <img src="images/smoothie.jpg" alt="Smoothie">
+        <h3>Green Smoothie</h3>
+        <p>90 Calories • Detox</p>
+        <button></button>
+      </div>
+      <div class="card">
+        <img src="images/finalrec.png" alt="">
+        <h3>Diet Recipes</h3>
+        <p>Calories • Protein Rich</p>
+        <div class = "button">
+        <a href="recipes.html"> Recipes </a>
+      </div>
+      </div> 
+    </div> 
+  </section>
+
+  <section id="testimonials">
+    <h2 style="text-align:center;">What Our Users Say</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>"This app completely changed my eating habits. Highly recommend!"</p>
+        <strong>- Priya</strong>
+      </div>
+      <div class="testimonial">
+        <p>"I lost 8kgs in 2 months using the personalized plans. Amazing!"</p>
+        <strong>- Rahul</strong>
+      </div>
+      <div class="testimonial">
+        <p>"The recipes are delicious and easy to make. Love it!"</p>
+        <strong>- Neha</strong>
+      </div>
+    </div>
+  </section>
+
+  <div id="chatbot-button">
+    <img src="images/chatbot.png" alt="chatbot">
+  </div>
+
+  <div id="chatbot-container">
+    <div id="chatbot-header">
+      <h3>Diet Assistant</h3>
+      <button id="chatbot-close">×</button>
+    </div>
+    <div id="chatbot-messages">
+      <div class="message bot-message">Hello! I'm your diet assistant. How can I help you with your nutrition questions today?</div>
+    </div>
+    <div id="chatbot-input">
+      <input type="text" id="chatbot-user-input" placeholder="Ask me about diet, nutrition...">
+      <button id="chatbot-send">Send</button>
+    </div>
+  </div>
+
+<section style="display:flex; flex-direction:column; align-items:center; justify-content:center; 
+                 padding:40px;  text-align:center;">
+
+  <h2 style="color:#f4f8f4; font-size:2rem; font-weight:bold; margin-bottom:10px;">
+     COMING SOON
+  </h2>
+  <p style="color:#fbfbfb; font-size:1.1rem; margin-bottom:30px; max-width:700px;">
+    We’re constantly improving <strong>Smart Diet</strong> to make healthy living even easier.  
+    Here’s what’s next on our roadmap:
+  </p>
+  <div style="display:flex; justify-content:center; align-items:stretch; 
+              gap:25px; flex-wrap:wrap; max-width:900px;">
+    <div style="background:#fff; padding:25px; border-radius:16px; width:260px; 
+                box-shadow:0 4px 12px rgba(0,0,0,0.1); transition:transform 0.2s;">
+      <h3 style="font-size:1.3rem; color:#2e7d32; margin-bottom:10px;">📱 Food Scanner</h3>
+      <p style="color:#555; font-size:0.95rem;">
+        Scan packaged food items with your phone camera to log nutrition instantly.
+      </p>
+    </div>
+    <div style="background:#fff; padding:25px; border-radius:16px; width:260px; 
+                box-shadow:0 4px 12px rgba(0,0,0,0.1); transition:transform 0.2s;">
+      <h3 style="font-size:1.3rem; color:#2e7d32; margin-bottom:10px;">🥗 Meal Sharing</h3>
+      <p style="color:#555; font-size:0.95rem;">
+        Upload your meal photos in the community, share diet ideas, and suggest what worked best for you to inspire others.
+      </p>
+    </div>
+    <div style="background:#fff; padding:25px; border-radius:16px; width:260px; 
+                box-shadow:0 4px 12px rgba(0,0,0,0.1); transition:transform 0.2s;">
+      <h3 style="font-size:1.3rem; color:#2e7d32; margin-bottom:10px;">🏆 Community Challenges</h3>
+      <p style="color:#555; font-size:0.95rem;">
+        Compete with friends in fun health challenges to stay motivated and consistent.
+      </p>
+    </div>
+  </div>
+</section>
+
+  <footer id="contact">
+    <p>Stay Connected with Us</p>
+    <a href="#">Instagram</a> | 
+    <a href="#">Twitter</a>
+    <p style="margin-top:10px;">&copy; 2025 Smart Diet. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="bot.js"></script>
+
 </body>
 </html>
