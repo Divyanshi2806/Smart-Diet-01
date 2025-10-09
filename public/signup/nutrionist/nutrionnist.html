@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART-DIET - Nutritionist Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="nutrition.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>SMART DIET</h1>
+        </div>
+        <div class="user-info">
+            <div class="user-avatar">ND</div>
+            <div class="user-details">
+                <h3>Nutritionist Dashboard</h3>
+                <p>Dr. Sarah Johnson</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" data-section="patients"><i class="fas fa-users"></i> My Patients</a></li>
+                <li><a href="#" data-section="diet-plans"><i class="fas fa-clipboard-list"></i> Diet Plans</a></li>
+                <li><a href="#" data-section="messages"><i class="fas fa-comments"></i> Messages</a></li>
+                <li><a href="#" data-section="progress"><i class="fas fa-chart-line"></i> Progress Tracking</a></li>
+                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div class="content-section active" id="dashboard">
+                <h2 class="section-title">Dashboard Overview</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Total Patients</h3>
+                        <div class="stat-value">12</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h3>Active Plans</h3>
+                        <div class="stat-value">8</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-comment-medical"></i>
+                        <h3>Unread Messages</h3>
+                        <div class="stat-value">5</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tasks"></i>
+                        <h3>Pending Tasks</h3>
+                        <div class="stat-value">3</div>
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Recent Activity</h3>
+                <div class="patients-grid">
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <div class="patient-avatar">SJ</div>
+                            <div class="patient-info">
+                                <h3>Vijay Singh</h3>
+                                <p>Age: 32 | Weight: 68kg</p>
+                            </div>
+                        </div>
+                        <div class="patient-body">
+                            <div class="patient-stats">
+                                <div class="stat">
+                                    <span class="stat-value">85%</span>
+                                    <span class="stat-label">Adherence</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">-3kg</span>
+                                    <span class="stat-label">Weight Loss</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">12</span>
+                                    <span class="stat-label">Days</span>
+                                </div>
+                            </div>
+                            <div class="patient-actions">
+                                <a href="#" class="btn">View Progress</a>
+                                <a href="#" class="btn btn-outline">Message</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <div class="patient-avatar">MB</div>
+                            <div class="patient-info">
+                                <h3>Neha Patel</h3>
+                                <p>Age: 45 | Weight: 92kg</p>
+                            </div>
+                        </div>
+                        <div class="patient-body">
+                            <div class="patient-stats">
+                                <div class="stat">
+                                    <span class="stat-value">72%</span>
+                                    <span class="stat-label">Adherence</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">-5kg</span>
+                                    <span class="stat-label">Weight Loss</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">24</span>
+                                    <span class="stat-label">Days</span>
+                                </div>
+                            </div>
+                            <div class="patient-actions">
+                                <a href="#" class="btn">View Progress</a>
+                                <a href="#" class="btn btn-outline">Message</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patients Section -->
+            <div class="content-section" id="patients">
+                <h2 class="section-title">My Patients</h2>
+                <div class="patients-grid">
+                    <!-- Patient cards will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Diet Plans Section -->
+            <div class="content-section" id="diet-plans">
+                <h2 class="section-title">Create Diet Plan</h2>
+                <div class="diet-plans-container">
+                    <form class="plan-form" id="dietPlanForm">
+                        <div class="form-group">
+                            <label for="patientSelect">Select Patient</label>
+                            <select id="patientSelect" class="form-control" required>
+                                <option value="">Choose a patient...</option>
+                                <option value="sarah">Vijay Singh</option>
+                                <option value="michael">Neha Patel</option>
+                                <option value="emma">Vidhi Prajapati</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="planName">Plan Name</label>
+                            <input type="text" id="planName" class="form-control" placeholder="e.g., Weight Loss Plan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="planDuration">Duration (weeks)</label>
+                            <input type="number" id="planDuration" class="form-control" placeholder="4" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="calorieTarget">Daily Calorie Target</label>
+                            <input type="number" id="calorieTarget" class="form-control" placeholder="1800" min="1000" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="breakfast">Breakfast</label>
+                            <textarea id="breakfast" class="form-control" placeholder="Describe breakfast recommendations..." required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="lunch">Lunch</label>
+                            <textarea id="lunch" class="form-control" placeholder="Describe lunch recommendations..." required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="dinner">Dinner</label>
+                            <textarea id="dinner" class="form-control" placeholder="Describe dinner recommendations..." required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="snacks">Snacks & Supplements</label>
+                            <textarea id="snacks" class="form-control" placeholder="Describe snack recommendations and supplements..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <button type="submit" class="btn" style="width: 100%;">Create Diet Plan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div class="content-section" id="messages">
+                <h2 class="section-title">Patient Communication</h2>
+                <div class="chat-container">
+                    <div class="chat-sidebar">
+                        <div class="chat-header">
+                            <h3>Conversations</h3>
+                        </div>
+                        <div class="chat-list">
+                            <div class="chat-item active">
+                                <div class="chat-avatar">VS</div>
+                                <div class="chat-info">
+                                    <h4>Vijay Singh</h4>
+                                    <p>Thanks for the diet plan!</p>
+                                </div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-avatar">NP</div>
+                                <div class="chat-info">
+                                    <h4>Neha Patel</h4>
+                                    <p>Can I substitute salmon with chicken?</p>
+                                </div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-avatar">VP</div>
+                                <div class="chat-info">
+                                    <h4>Vidhi Prajapati</h4>
+                                    <p>I'm experiencing some bloating...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-main">
+                        <div class="chat-messages">
+                            <div class="message received">
+                                <p>Hi, I have a question about my meal plan for tomorrow.</p>
+                                <div class="message-time">10:24 AM</div>
+                            </div>
+                            <div class="message sent">
+                                <p>Sure, what would you like to know?</p>
+                                <div class="message-time">10:25 AM</div>
+                            </div>
+                            <div class="message received">
+                                <p>Can I substitute the salmon with chicken? I don't have any salmon available.</p>
+                                <div class="message-time">10:26 AM</div>
+                            </div>
+                            <div class="message sent">
+                                <p>Yes, that's fine. Just make sure it's grilled, not fried.</p>
+                                <div class="message-time">10:27 AM</div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" placeholder="Type your message..." id="messageInput">
+                            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tracking Section -->
+            <div class="content-section" id="progress">
+                <h2 class="section-title">Patient Progress Tracking</h2>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <h3>Weight Progress</h3>
+                        <select id="progressPatientSelect" class="form-control" style="width: auto;">
+                            <option value="sarah">Vijay Singh</option>
+                            <option value="michael">Neha Patel</option>
+                            <option value="emma">Vidhi Prajapati</option>
+                        </select>
+                    </div>
+                    <div class="progress-chart">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 70%"></div>
+                            <div class="progress-label">Week 1</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 65%"></div>
+                            <div class="progress-label">Week 2</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 60%"></div>
+                            <div class="progress-label">Week 3</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 55%"></div>
+                            <div class="progress-label">Week 4</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <h3>Nutrition Adherence</h3>
+                    </div>
+                    <div class="progress-chart">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 80%"></div>
+                            <div class="progress-label">Mon</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 75%"></div>
+                            <div class="progress-label">Tue</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 90%"></div>
+                            <div class="progress-label">Wed</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 85%"></div>
+                            <div class="progress-label">Thu</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 70%"></div>
+                            <div class="progress-label">Fri</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 95%"></div>
+                            <div class="progress-label">Sat</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="height: 80%"></div>
+                            <div class="progress-label">Sun</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="content-section" id="settings">
+                <h2 class="section-title">Account Settings</h2>
+                <div class="diet-plans-container">
+                    <form class="plan-form" id="settingsForm">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" class="form-control" value="Dr. Sara Singh" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" value="sarah.johnson@smartdiet.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialization">Specialization</label>
+                            <input type="text" id="specialization" class="form-control" value="Clinical Nutrition" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" value="+1 (555) 123-4567" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <button type="submit" class="btn" style="width: 100%;">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="nutritionist.js"></script>
+</body>
+</html>

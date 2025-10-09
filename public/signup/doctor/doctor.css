@@ -6,7 +6,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #000000 0%, #000000 50%, #000000 100%);
+    background: linear-gradient(135deg, #ffffff 0%,#ffffff 50%, #ade3be 100%);
     color: #e0e0e0;
     line-height: 1.6;
     min-height: 100vh;
@@ -30,7 +30,7 @@ body::before {
 
 /* Header Styles */
 header {
-    background: rgba(18, 18, 18, 0.8);
+    background: #1a4829;
     padding: 30px 20px;
     text-align: center;
     color: #ffffff;
@@ -52,7 +52,7 @@ header h1 {
 
 header p {
     font-size: 1.2rem;
-    color: #b0b0b0;
+    color: #ffffff;
     margin-bottom: 15px;
 }
 
@@ -64,7 +64,7 @@ nav {
 }
 
 nav a {
-    color: #4CAF50;
+    color: #fefefe;
     text-decoration: none;
     font-weight: 600;
     padding: 8px 16px;
@@ -75,7 +75,7 @@ nav a {
 }
 
 nav a:hover {
-    color: #8BC34A;
+    color: #fefffc;
     background: rgba(76, 175, 80, 0.1);
     transform: translateY(-2px);
 }
@@ -93,7 +93,7 @@ nav a:hover {
 .verification-wrapper {
     width: 800px;
     max-width: 95%;
-    background: rgba(30, 30, 30, 0.8);
+    background: #379356;
     border: 1px solid rgba(76, 175, 80, 0.3);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -118,13 +118,14 @@ nav a:hover {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: #e0e0e0;
 }
 
 .verification-wrapper > p {
     text-align: center;
     margin-bottom: 30px;
     font-size: 1.1rem;
-    color: #b0b0b0;
+    color: #fffcfc;
 }
 
 /* Upload Sections */
@@ -137,7 +138,7 @@ nav a:hover {
     margin-bottom: 20px;
     border-bottom: 2px solid rgba(76, 175, 80, 0.3);
     padding-bottom: 10px;
-    color: #4CAF50;
+    color: #f9f9f9;
 }
 
 .upload-area {
@@ -148,26 +149,26 @@ nav a:hover {
     margin-bottom: 20px;
     transition: all 0.3s ease;
     cursor: pointer;
-    background: rgba(40, 40, 40, 0.5);
+    background: rgba(249, 247, 247, 0.5);
 }
 
 .upload-area:hover {
     border-color: #4CAF50;
-    background: rgba(76, 175, 80, 0.05);
+    background: rgba(254, 255, 255, 0.05);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .upload-area i {
     font-size: 3.5rem;
-    color: #4CAF50;
+    color: #fdfdfd;
     margin-bottom: 20px;
     transition: all 0.3s ease;
 }
 
 .upload-area:hover i {
     transform: scale(1.1);
-    color: #8BC34A;
+    color: #ffffff;
 }
 
 .upload-area h3 {
