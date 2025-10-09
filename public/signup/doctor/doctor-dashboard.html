@@ -3,9 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SMART-DIET - Nutritionist Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="doctor.css">
 </head>
 <body>
-    <h1>Nutritionist Dashboard</h1>
+    <header>
+        <h1>SMART-DIET</h1>
+        <p>Nutritionist Verification Portal</p>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="verification-wrapper">
+            <h1>Account Verification</h1>
+            <p>Please upload the required documents to verify your credentials as a nutritionist</p>
+            
+            <div class="upload-section">
+                <h2>Professional Certificate</h2>
+                <div class="upload-area" id="certificateUpload">
+                    <i class="fas fa-file-certificate"></i>
+                    <h3>Upload Your Certificate</h3>
+                    <p>Supported formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <input type="file" id="certificateFile" class="file-input" accept=".pdf,.jpg,.png,.jpeg">
+                    <label for="certificateFile" class="file-label">Choose File</label>
+                </div>
+                <div class="uploaded-files" id="certificateFiles">
+                    <!-- Uploaded certificate files will appear here -->
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <h2>Government ID</h2>
+                <div class="upload-area" id="governmentIdUpload">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Upload Government ID</h3>
+                    <p>Supported formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <input type="file" id="governmentIdFile" class="file-input" accept=".pdf,.jpg,.png,.jpeg">
+                    <label for="governmentIdFile" class="file-label">Choose File</label>
+                </div>
+                <div class="uploaded-files" id="governmentIdFiles">
+                    <!-- Uploaded government ID files will appear here -->
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <h2>Medical ID</h2>
+                <div class="upload-area" id="medicalIdUpload">
+                    <i class="fas fa-stethoscope"></i>
+                    <h3>Upload Medical ID</h3>
+                    <p>Supported formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <input type="file" id="medicalIdFile" class="file-input" accept=".pdf,.jpg,.png,.jpeg">
+                    <label for="medicalIdFile" class="file-label">Choose File</label>
+                </div>
+                <div class="uploaded-files" id="medicalIdFiles">
+                    <!-- Uploaded medical ID files will appear here -->
+                </div>
+            </div>
+            
+            <div class="submit-section">
+                <button class="btn" id="submitVerification" disabled>Submit for Verification</button>
+                <div class="status-message" id="statusMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 SMART-DIET. All rights reserved.</p>
+        <div>
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Terms of Service</a> | 
+            <a href="#">Contact Us</a>
+        </div>
+    </footer>
+
+    <script src="doctor.js"></script>
 </body>
 </html>
