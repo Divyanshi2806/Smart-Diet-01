@@ -1,40 +1,202 @@
-// File upload functionality
-const fileInputs = document.querySelectorAll('.file-input');
-const submitBtn = document.getElementById('submitVerification');
-const statusMessage = document.getElementById('statusMessage');
+// doctor.js - Nutritionist Document Upload with Firestore
 
-// Track uploaded files for each category
-const uploadedFiles = {
+let currentUser = null;
+let uploadedFiles = {
     certificate: [],
     governmentId: [],
     medicalId: []
 };
 
-fileInputs.forEach(input => {
-    input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const fileType = getFileType(input.id);
-            const fileId = Date.now();
-            
-            // Check file size (5MB limit)
-            if (file.size > 5 * 1024 * 1024) {
-                showStatus('File size exceeds 5MB limit. Please choose a smaller file.', 'error');
-                return;
-            }
-            
-            uploadedFiles[fileType].push({
-                id: fileId,
-                name: file.name,
-                size: formatFileSize(file.size),
-                type: fileType
-            });
-            
-            renderUploadedFiles(fileType);
-            checkAllFilesUploaded();
+// Initialize when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDocumentUpload();
+});
+
+async function initializeDocumentUpload() {
+    console.log('🚀 Initializing nutritionist document upload...');
+    
+    // Wait for Firebase to be available
+    if (!window.firebaseAuth) {
+        console.error('Firebase not initialized');
+        showStatus('Firebase not loaded. Please refresh the page.', 'error');
+        return;
+    }
+
+    // Check authentication
+    const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js");
+    const { getFirestore, doc, getDoc, setDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+    
+    const auth = getAuth();
+    const db = getFirestore();
+    
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            console.log('Nutritionist logged in:', user.uid);
+            await checkUserVerificationStatus(user.uid, db);
+        } else {
+            console.log('No user logged in, redirecting to login...');
+            window.location.href = "../login.html";
         }
     });
-});
+
+    setupFileUploads();
+}
+
+async function checkUserVerificationStatus(userId, db) {
+    try {
+        const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+        
+        const userRef = doc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
+        
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            
+            // If already verified, redirect to dashboard
+            if (userData.verificationStatus === 'verified') {
+                window.location.href = "nutritionist-dashboard.html";
+            }
+            // If pending, show pending message
+            else if (userData.verificationStatus === 'pending') {
+                showStatus('Your documents are under review. Please wait for verification.', 'pending');
+                document.getElementById('submitVerification').disabled = true;
+                document.getElementById('submitVerification').textContent = 'Verification Pending';
+            }
+        } else {
+            console.log('No user document found in Firestore, will create one on upload');
+        }
+    } catch (error) {
+        console.error('Error checking verification status:', error);
+    }
+}
+
+// File upload functionality
+function setupFileUploads() {
+    const fileInputs = document.querySelectorAll('.file-input');
+    const submitBtn = document.getElementById('submitVerification');
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileType = getFileType(input.id);
+                const fileId = Date.now();
+                
+                // Check file size (1MB limit for Base64)
+                if (file.size > 1 * 1024 * 1024) {
+                    showStatus('File size exceeds 1MB limit. Please choose a smaller file.', 'error');
+                    return;
+                }
+                
+                // Check file type
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!validTypes.includes(file.type)) {
+                    showStatus('Please upload only JPG or PNG files (PDF not supported with Base64).', 'error');
+                    return;
+                }
+                
+                // Convert file to Base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedFiles[fileType].push({
+                        id: fileId,
+                        name: file.name,
+                        size: formatFileSize(file.size),
+                        type: file.type,
+                        base64: e.target.result, // This is the Base64 string
+                        uploadedAt: new Date().toISOString()
+                    });
+                    
+                    renderUploadedFiles(fileType);
+                    checkAllFilesUploaded();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    // REAL SUBMIT VERIFICATION
+    document.getElementById('submitVerification').addEventListener('click', async () => {
+        if (!currentUser) {
+            showStatus('Please log in first.', 'error');
+            return;
+        }
+
+        showStatus('Uploading documents...', 'pending');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Uploading...';
+
+        try {
+            // Import Firestore modules
+            const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+            
+            const db = getFirestore();
+
+            // Prepare document data with Base64 strings
+            const documentData = {};
+            
+            for (const [fileType, files] of Object.entries(uploadedFiles)) {
+                documentData[fileType] = files.map(file => ({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    base64: file.base64, // Store Base64 string directly
+                    uploadedAt: file.uploadedAt
+                }));
+            }
+
+            // Get existing user data first (if any)
+            const userRef = doc(db, 'users', currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            
+            let userData = {};
+            
+            if (userSnap.exists()) {
+                // Document exists, merge with existing data
+                userData = userSnap.data();
+            } else {
+                // Document doesn't exist, create basic user data
+                userData = {
+                    role: 'doctor',
+                    email: currentUser.email,
+                    createdAt: new Date().toISOString()
+                };
+            }
+
+            // Add/update verification data
+            userData.verificationStatus = 'pending';
+            userData.documents = documentData;
+            userData.documentsSubmittedAt = new Date().toISOString();
+            userData.documentsUploaded = true;
+
+            // Use setDoc with merge to create or update the document
+            await setDoc(userRef, userData, { merge: true });
+
+            showStatus('Documents submitted successfully! Waiting for admin verification.', 'success');
+            submitBtn.textContent = 'Verification Submitted';
+
+            console.log('✅ All documents uploaded successfully to Firestore');
+            console.log('User document created/updated:', userData);
+
+        } catch (error) {
+            console.error('Error uploading documents:', error);
+            showStatus('Error uploading documents: ' + error.message, 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit for Verification';
+        }
+    });
+
+    // Make upload areas clickable
+    document.querySelectorAll('.upload-area').forEach(area => {
+        area.addEventListener('click', (e) => {
+            if (e.target.classList.contains('upload-area')) {
+                const fileInput = area.querySelector('.file-input');
+                fileInput.click();
+            }
+        });
+    });
+}
 
 function getFileType(inputId) {
     switch(inputId) {
@@ -86,6 +248,7 @@ function renderUploadedFiles(fileType) {
 }
 
 function checkAllFilesUploaded() {
+    const submitBtn = document.getElementById('submitVerification');
     const allUploaded = 
         uploadedFiles.certificate.length > 0 &&
         uploadedFiles.governmentId.length > 0 &&
@@ -95,50 +258,7 @@ function checkAllFilesUploaded() {
 }
 
 function showStatus(message, type) {
+    const statusMessage = document.getElementById('statusMessage');
     statusMessage.textContent = message;
     statusMessage.className = 'status-message ' + type;
-    
-    // Hide status after 5 seconds for success/error messages
-    if (type !== 'pending') {
-        setTimeout(() => {
-            statusMessage.className = 'status-message';
-        }, 5000);
-    }
 }
-
-// Submit verification
-document.getElementById('submitVerification').addEventListener('click', () => {
-    // Show pending status
-    showStatus('Your documents have been submitted for verification. This process may take 1-2 business days.', 'pending');
-    
-    // Disable the submit button
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Verification Submitted';
-    
-    // In a real application, this would send the files to a server
-    // For demo purposes, we'll simulate a verification process
-    setTimeout(() => {
-        // After 3 seconds, simulate successful verification
-        showStatus('Congratulations! Your account has been verified. Redirecting to dashboard...', 'success');
-        
-        // Redirect to dashboard after a short delay
-        setTimeout(() => {
-            window.location.href = 'nutritionist-dashboard.html';
-        }, 3000);
-    }, 3000);
-});
-
-// Login modal function (placeholder)
-function openLoginModal() {
-    alert('Login functionality would open here in a complete implementation.');
-}
-
-// Make upload areas clickable
-document.querySelectorAll('.upload-area').forEach(area => {
-    area.addEventListener('click', (e) => {
-        if (e.target.classList.contains('upload-area')) {
-            const fileInput = area.querySelector('.file-input');
-            fileInput.click();
-        }
-    });
-});

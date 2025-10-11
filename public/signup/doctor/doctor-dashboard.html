@@ -6,6 +6,32 @@
     <title>SMART-DIET - Nutritionist Verification</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="doctor.css">
+    
+<script type="module">
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCU_XqW-FuNivXUYuDHY8fG2-FFxP_yUb4",
+        authDomain: "smart-diet-5706d.firebaseapp.com",
+        databaseURL: "https://smart-diet-5706d-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "smart-diet-5706d",
+        storageBucket: "smart-diet-5706d.firebasestorage.app",
+        messagingSenderId: "659505981433",
+        appId: "1:659505981433:web:95fc252458e5a4e1ee7f28",
+        measurementId: "G-QFXFE3YF0R"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    window.firebaseAuth = getAuth(app);
+    window.firebaseFirestore = getFirestore(app);
+    window.firebaseApp = app;
+    
+    console.log('✅ Firebase initialized for nutritionist verification');
+</script>
 </head>
 <body>
     <header>
@@ -82,6 +108,7 @@
         </div>
     </footer>
 
-    <script src="doctor.js"></script>
+    <!-- Load doctor.js as a module -->
+    <script type="module" src="doctor.js"></script>
 </body>
 </html>

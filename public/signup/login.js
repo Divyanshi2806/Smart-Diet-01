@@ -1,10 +1,9 @@
-// Firebase imports and initialization
+// Firebase imports and initialization - UPDATED TO FIRESTORE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// Your Firebase configuration
 // Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCU_XqW-FuNivXUYuDHY8fG2-FFxP_yUb4",
@@ -21,7 +20,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const database = getDatabase(app);
+const firestore = getFirestore(app); // USING FIRESTORE
+
+// Export for use in other files
+export { auth, firestore };
 
 // Main application logic
 class AuthApp {
@@ -35,6 +37,7 @@ class AuthApp {
     console.log('🚀 AuthApp initialized');
     this.bindEvents();
     this.updateFormDisplay();
+    this.loadNutritionistsForSelection(); // Load nutritionists on init
   }
 
   bindEvents() {
@@ -111,8 +114,62 @@ class AuthApp {
     if (currentForm) {
       console.log('👁️ Showing form:', currentFormId);
       currentForm.classList.add('active');
+      
+      // Load nutritionists when patient signup form is shown
+      if (currentFormId === 'patient-signup') {
+        this.loadNutritionistsForSelection();
+      }
     } else {
       console.error('❌ Form not found:', currentFormId);
+    }
+  }
+
+  // LOAD NUTRITIONISTS FOR PATIENT SELECTION
+  async loadNutritionistsForSelection() {
+    try {
+        console.log('🔍 Loading nutritionists from Firestore...');
+        
+        const nutritionistsRef = collection(firestore, 'users');
+        const snapshot = await getDocs(nutritionistsRef);
+        
+        const selectElement = document.getElementById('patient-signup-nutritionist');
+        if (!selectElement) {
+            console.log('❌ Nutritionist select element not found');
+            return;
+        }
+        
+        selectElement.innerHTML = '<option value="">Choose a nutritionist...</option>';
+        
+        let nutritionistCount = 0;
+        
+        snapshot.forEach((doc) => {
+            const userData = doc.data();
+            console.log('👨‍⚕️ Found user:', userData.role, userData.verificationStatus, userData.name);
+            
+            if (userData.role === 'doctor' && userData.verificationStatus === 'verified') {
+                const option = document.createElement('option');
+                option.value = doc.id; // Nutritionist's user ID
+                option.textContent = `${userData.name || 'Nutritionist'} - ${userData.specialization || 'Certified Nutritionist'}`;
+                selectElement.appendChild(option);
+                nutritionistCount++;
+                console.log('✅ Added nutritionist:', userData.name);
+            }
+        });
+        
+        console.log(`✅ Loaded ${nutritionistCount} nutritionists for selection`);
+        
+        if (nutritionistCount === 0) {
+            selectElement.innerHTML = '<option value="">No verified nutritionists available</option>';
+            console.log('⚠️ No verified nutritionists found');
+        }
+        
+    } catch (error) {
+        console.error('❌ Error loading nutritionists:', error);
+        
+        const selectElement = document.getElementById('patient-signup-nutritionist');
+        if (selectElement) {
+            selectElement.innerHTML = '<option value="">Error loading nutritionists</option>';
+        }
     }
   }
 
@@ -146,7 +203,8 @@ class AuthApp {
     });
   }
 
-  handleSignup(e, role, form) {
+  // SIGNUP WITH FIRESTORE
+  async handleSignup(e, role, form) {
     e.preventDefault();
     console.log(`🎉 === Starting SIGNUP for: ${role} ===`);
     
@@ -162,7 +220,6 @@ class AuthApp {
       return;
     }
 
-    // Validate password strength
     if (password.length < 6) {
       alert("Password must be at least 6 characters long");
       return;
@@ -176,46 +233,129 @@ class AuthApp {
         userData[fieldName] = el.value.trim();
       }
     });
+    
+    // ADD NUTRITIONIST SELECTION FOR PATIENTS
     userData.role = role;
+    userData.email = email; // Store email in user data
     userData.createdAt = new Date().toISOString();
+    
+    // Set verification status for doctors
+    if (role === 'doctor') {
+      userData.verificationStatus = 'pending';
+      userData.documentsUploaded = false;
+    }
+    
+    // Store selected nutritionist for patients
+    if (role === 'patient') {
+      const nutritionistSelect = form.querySelector('#patient-signup-nutritionist');
+      if (nutritionistSelect && nutritionistSelect.value) {
+        userData.requestedNutritionist = nutritionistSelect.value;
+        userData.assignmentStatus = 'pending';
+        console.log('✅ Patient selected nutritionist:', nutritionistSelect.value);
+      }
+    }
 
     console.log('💾 User data to save:', userData);
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        console.log('✅ Firebase user created. UID:', user.uid);
-        
-        return set(ref(database, 'users/' + user.uid), userData)
-          .then(() => {
-            console.log('✅ User data saved to database');
-            console.log('🔄 Calling redirectToDashboard for role:', role);
-            alert("Account created successfully! Redirecting to your dashboard...");
-            this.redirectToDashboard(role);
-          });
-      })
-      .catch(error => {
-        console.error("❌ Signup error:", error);
-        let errorMessage = "Signup failed. ";
-        
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            errorMessage += "This email is already registered.";
-            break;
-          case 'auth/invalid-email':
-            errorMessage += "Invalid email address.";
-            break;
-          case 'auth/weak-password':
-            errorMessage += "Password is too weak.";
-            break;
-          default:
-            errorMessage += error.message;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('✅ Firebase user created. UID:', user.uid);
+      
+      // Save user data to Firestore
+      await setDoc(doc(firestore, 'users', user.uid), userData);
+      console.log('✅ User data saved to Firestore');
+
+      // CREATE PATIENT RECORD IF PATIENT SIGNS UP
+      // CREATE PATIENT RECORD IF PATIENT SIGNS UP
+if (role === 'patient') {
+    const nutritionistSelect = form.querySelector('#patient-signup-nutritionist');
+    const selectedNutritionistId = nutritionistSelect ? nutritionistSelect.value : '';
+    
+    if (!selectedNutritionistId) {
+        alert("Please select a nutritionist!");
+        return;
+    }
+
+    // Get nutritionist name for display
+    let nutritionistName = 'Nutritionist';
+    try {
+        const nutritionistDoc = await getDoc(doc(firestore, 'users', selectedNutritionistId));
+        if (nutritionistDoc.exists()) {
+            nutritionistName = nutritionistDoc.data().name || 'Nutritionist';
         }
-        
-        alert(errorMessage);
-      });
+    } catch (error) {
+        console.error('Error fetching nutritionist name:', error);
+    }
+
+    const patientData = {
+        userId: user.uid,
+        name: userData.name || 'Patient',
+        email: email,
+        age: userData.age || '',
+        phone: userData.phone || '',
+        // CRITICAL: Store the relationship properly
+        assignedNutritionist: selectedNutritionistId,
+        assignedNutritionistName: nutritionistName,
+        status: 'pending', // pending, approved, rejected
+        assignmentStatus: 'pending',
+        createdAt: new Date().toISOString(),
+        userType: 'patient'
+    };
+    
+    // Save to patients collection with user ID as document ID
+    await setDoc(doc(firestore, 'patients', user.uid), patientData);
+    
+    // ALSO create a request in nutritionist's pending requests
+    const requestData = {
+        patientId: user.uid,
+        patientName: userData.name || 'Patient',
+        patientEmail: email,
+        requestedAt: new Date().toISOString(),
+        status: 'pending'
+    };
+    
+    await setDoc(doc(firestore, 'nutritionists', selectedNutritionistId, 'pendingRequests', user.uid), requestData);
+    
+    console.log('✅ Patient record created with nutritionist assignment');
+    console.log('✅ Nutritionist request created');
+    
+    alert("Account created successfully! Your nutritionist request has been sent.");
+    this.redirectToDashboard(role);
+} else {
+        // For doctors and regular users
+        if (role === 'doctor') {
+          alert("Account created successfully! Please upload your verification documents.");
+          window.location.href = "doctor/doctor-dashboard.html";
+        } else {
+          alert("Account created successfully! Redirecting to your dashboard...");
+          this.redirectToDashboard(role);
+        }
+      }
+      
+    } catch (error) {
+      console.error("❌ Signup error:", error);
+      let errorMessage = "Signup failed. ";
+      
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage += "This email is already registered.";
+          break;
+        case 'auth/invalid-email':
+          errorMessage += "Invalid email address.";
+          break;
+        case 'auth/weak-password':
+          errorMessage += "Password is too weak.";
+          break;
+        default:
+          errorMessage += error.message;
+      }
+      
+      alert(errorMessage);
+    }
   }
 
+  // LOGIN WITH FIRESTORE
   async handleLogin(e, role, form) {
     e.preventDefault();
     console.log(`🔐 === Starting LOGIN for: ${role} ===`);
@@ -237,29 +377,24 @@ class AuthApp {
       // Doctor login with Medical ID or email
       if (role === 'doctor') {
         console.log('🩺 Doctor login - checking medical ID...');
-        const dbRef = ref(database, 'users');
-        const snapshot = await get(dbRef);
         
-        if (snapshot.exists()) {
-          const users = snapshot.val();
-          let foundByMedicalId = false;
-          
-          for (let uid in users) {
-            const user = users[uid];
-            if (user.role === 'doctor' && user.medid === inputValue) {
-              emailToLogin = user.email;
-              foundByMedicalId = true;
-              console.log('✅ Found doctor by medical ID. Email:', emailToLogin);
-              break;
-            }
-          }
+        // Query Firestore for doctor with this medical ID
+        const usersRef = collection(firestore, 'users');
+        const q = query(usersRef, where("medid", "==", inputValue), where("role", "==", "doctor"));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          const userData = doc.data();
+          emailToLogin = userData.email;
+          console.log('✅ Found doctor by medical ID. Email:', emailToLogin);
         }
       }
 
       console.log('🔑 Attempting login with:', emailToLogin);
       const userCredential = await signInWithEmailAndPassword(auth, emailToLogin, password);
       console.log('✅ Login successful for user:', userCredential.user.uid);
-      console.log('🔄 Calling redirectToDashboard for role:', role);
+      
       this.redirectToDashboard(role);
 
     } catch (err) {
@@ -291,7 +426,6 @@ class AuthApp {
     console.log('📍 Redirect URL:', redirectUrl);
     console.log('⏳ Waiting 1 second before redirect...');
     
-    // Add a small delay to ensure everything is processed
     setTimeout(() => {
       console.log('🚀 EXECUTING REDIRECT to:', redirectUrl);
       window.location.href = redirectUrl;

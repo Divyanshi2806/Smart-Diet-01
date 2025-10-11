@@ -6,6 +6,31 @@
     <title>SMART-DIET - Nutritionist Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="nutrition.css">
+
+<script type="module">
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCU_XqW-FuNivXUYuDHY8fG2-FFxP_yUb4",
+        authDomain: "smart-diet-5706d.firebaseapp.com",
+        databaseURL: "https://smart-diet-5706d-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "smart-diet-5706d",
+        storageBucket: "smart-diet-5706d.firebasestorage.app",
+        messagingSenderId: "659505981433",
+        appId: "1:659505981433:web:95fc252458e5a4e1ee7f28",
+        measurementId: "G-QFXFE3YF0R"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    window.firebaseFirestore = getFirestore(app);
+    window.firebaseAuth = getAuth(app);
+    
+    console.log('✅ Firebase initialized for nutritionist dashboard');
+</script>
 </head>
 <body>
     <header>
@@ -14,9 +39,10 @@
         </div>
         <div class="user-info">
             <div class="user-avatar">ND</div>
+            <!-- To this -->
             <div class="user-details">
-                <h3>Nutritionist Dashboard</h3>
-                <p>Dr. Sarah Johnson</p>
+               <h3>Nutritionist Dashboard</h3>
+               <p>Loading...</p> <!-- This will be updated by JavaScript -->
             </div>
         </div>
     </header>
@@ -37,6 +63,22 @@
             <!-- Dashboard Section -->
             <div class="content-section active" id="dashboard">
                 <h2 class="section-title">Dashboard Overview</h2>
+                <!-- Add this to the Dashboard Section -->
+    <!-- Add Notification Alert -->
+    <div class="notification-alert" id="pending-requests-alert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-bell"></i>
+            <span>You have <strong id="pending-count">0</strong> pending patient requests!</span>
+            <button class="btn btn-small" onclick="switchToSection('patients')">View Requests</button>
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <!-- Your existing stats cards -->
+    </div>
+    
+    <!-- Rest of your dashboard content -->
+</div>
                 
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -126,12 +168,23 @@
             </div>
 
             <!-- Patients Section -->
-            <div class="content-section" id="patients">
-                <h2 class="section-title">My Patients</h2>
-                <div class="patients-grid">
-                    <!-- Patient cards will be loaded here -->
-                </div>
-            </div>
+           <!-- Patients Section -->
+<div class="content-section" id="patients">
+    <h2 class="section-title">My Patients</h2>
+    
+    <!-- Add this pending requests section -->
+    <div class="pending-requests-section">
+        <h3>Pending Patient Requests</h3>
+        <div id="pending-requests" class="pending-requests-container">
+            <!-- Pending requests will be loaded here -->
+        </div>
+    </div>
+    
+    <h3>Approved Patients</h3>
+    <div class="patients-grid">
+        <!-- Patient cards will be loaded here -->
+    </div>
+</div>
 
             <!-- Diet Plans Section -->
             <div class="content-section" id="diet-plans">
@@ -340,6 +393,7 @@
         </div>
     </div>
 
-    <script src="nutritionist.js"></script>
+    <!-- At the end of body, before closing </body> tag -->
+    <script type="module" src="nutritionist.js"></script>
 </body>
 </html>

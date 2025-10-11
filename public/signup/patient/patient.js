@@ -1,664 +1,508 @@
-// Main Application Controller
-class SmartDietApp {
-    constructor() {
-        this.data = appData;
-        this.currentTab = 'diet-plan';
-        this.init();
+// patient.js - Updated to use Firestore and show real data
+console.log('🔧 Loading patient.js...');
+
+// Use Firebase from HTML initialization
+const db = window.firebaseFirestore;
+const auth = window.firebaseAuth;
+
+// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM loaded, initializing patient dashboard...');
+    initializePatientDashboard();
+});
+
+async function initializePatientDashboard() {
+    console.log('🚀 Starting patient dashboard...');
+    
+    if (!auth) {
+        console.error('❌ Firebase Auth not available');
+        return;
     }
+    
+    // Check authentication
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            console.log('👤 Patient logged in:', user.uid);
+            
+            // Load patient data and assigned nutritionist
+            await loadPatientData(user.uid);
+            
+            // Setup all functionality
+            setupAllFeatures();
+            
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+}
 
-    init() {
-        this.renderHeader();
-        this.renderNavigation();
-        this.renderAllSections();
-        this.setupEventListeners();
-        this.activateTab(this.currentTab);
+// LOAD PATIENT DATA AND NUTRITIONIST INFO
+async function loadPatientData(patientId) {
+    try {
+        const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+        
+        // Load patient data
+        const patientRef = doc(db, 'patients', patientId);
+        const patientSnap = await getDoc(patientRef);
+        
+        if (patientSnap.exists()) {
+            const patientData = patientSnap.data();
+            console.log('📋 Patient data loaded:', patientData);
+            
+            // Load assigned nutritionist data
+            if (patientData.assignedNutritionist) {
+                await loadNutritionistData(patientData.assignedNutritionist);
+            } else if (patientData.requestedNutritionist) {
+                await loadNutritionistData(patientData.requestedNutritionist);
+            }
+            
+            // Update dashboard with patient data
+            updatePatientDashboard(patientData);
+        } else {
+            console.log('❌ No patient data found');
+        }
+        
+    } catch (error) {
+        console.error('Error loading patient data:', error);
     }
+}
 
-    // Render Header with Patient Info
-    renderHeader() {
-        const userInfo = document.getElementById('user-info');
-        const patient = this.data.patient;
+// LOAD NUTRITIONIST DATA
+async function loadNutritionistData(nutritionistId) {
+    try {
+        const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+        
+        const nutritionistRef = doc(db, 'users', nutritionistId);
+        const nutritionistSnap = await getDoc(nutritionistRef);
+        
+        if (nutritionistSnap.exists()) {
+            const nutritionistData = nutritionistSnap.data();
+            console.log('👨‍⚕️ Nutritionist data loaded:', nutritionistData);
+            
+            // Update UI with nutritionist data
+            updateNutritionistUI(nutritionistData);
+        }
+        
+    } catch (error) {
+        console.error('Error loading nutritionist data:', error);
+    }
+}
 
+// UPDATE PATIENT DASHBOARD WITH REAL DATA
+function updatePatientDashboard(patientData) {
+    console.log('🎨 Updating patient dashboard with real data...');
+    
+    // Update header with patient name
+    const userInfo = document.getElementById('user-info');
+    if (userInfo && patientData.name) {
         userInfo.innerHTML = `
             <div class="user-details">
-                <span class="user-name">${patient.name}</span>
-                <span class="user-status">${patient.status}</span>
+                <span class="user-name">${patientData.name}</span>
+                <span class="user-status">${patientData.assignmentStatus === 'approved' ? 'Active Patient' : 'Pending Approval'}</span>
             </div>
-            <img src="${patient.avatar}" alt="${patient.name}" class="user-avatar">
+            <div class="user-avatar">${patientData.name.charAt(0)}</div>
         `;
     }
+    
+    // Update progress summary with real data
+    updateProgressSummary(patientData);
+}
 
-    // Render Navigation Tabs
-    renderNavigation() {
-        const navTabs = document.getElementById('navigation-tabs');
-        
-        navTabs.innerHTML = this.data.tabs.map(tab => `
-            <button class="tab" data-tab="${tab.id}">
-                <i class="${tab.icon}"></i>
-                <span>${tab.label}</span>
-            </button>
-        `).join('');
-    }
-
-    // Render All Sections
-    renderAllSections() {
-        this.renderDietPlan();
-        this.renderChat();
-        this.renderProgress();
-        this.renderNutritionist();
-    }
-
-    // Diet Plan Section
-    renderDietPlan() {
-        this.renderPeriodSelector();
-        this.renderMealCards();
-    }
-
-    renderPeriodSelector() {
-        const periodSelector = document.getElementById('period-selector');
-        const periods = this.data.dietPlan.periods;
-
-        periodSelector.innerHTML = periods.map(period => `
-            <button class="period-btn ${period === 'Daily' ? 'active' : ''}">${period}</button>
-        `).join('');
-    }
-
-    renderMealCards() {
-        const mealCards = document.getElementById('meal-cards');
-        const meals = this.data.dietPlan.meals;
-
-        mealCards.innerHTML = meals.map(meal => `
-            <div class="meal-card">
-                <div class="meal-header">
-                    <h3><i class="${meal.icon}"></i> ${this.capitalizeFirst(meal.type)}</h3>
-                    <span class="meal-time">${meal.time}</span>
-                </div>
-                <div class="meal-content">
-                    <h4>${meal.name}</h4>
-                    <p class="meal-description">${meal.description}</p>
-                    <div class="nutrition-info">
-                        ${this.renderNutritionInfo(meal.nutrition)}
-                    </div>
-                </div>
-                <div class="nutritionist-notes">
-                    <h5><i class="fas fa-sticky-note"></i> Nutritionist's Notes</h5>
-                    <p>${meal.notes}</p>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    renderNutritionInfo(nutrition) {
-        return Object.entries(nutrition).map(([key, value]) => `
-            <div class="nutrition-item">
-                <span class="nutrition-value">${value}</span>
-                <span class="nutrition-label">${this.capitalizeFirst(key)}</span>
-            </div>
-        `).join('');
-    }
-
-    // Chat Section
-    renderChat() {
-        this.renderNutritionistStatus();
-        this.renderChatHistory();
-    }
-
-    renderNutritionistStatus() {
-        const statusElement = document.getElementById('nutritionist-status');
-        const nutritionist = this.data.chat.nutritionist;
-
-        statusElement.innerHTML = `
-            <i class="fas fa-circle"></i>
-            <span>${nutritionist.name} is ${this.capitalizeFirst(nutritionist.status)}</span>
-        `;
-        statusElement.className = `nutritionist-status ${nutritionist.status}`;
-    }
-
-    renderChatHistory() {
-        const chatHistory = document.getElementById('chat-history');
-        const messages = this.data.chat.messages;
-        const patientAvatar = this.data.patient.avatar;
-        const nutritionistAvatar = this.data.chat.nutritionist.avatar;
-
-        chatHistory.innerHTML = messages.map(message => `
-            <div class="message ${message.sender}-message">
-                ${message.sender === 'nutritionist' ? `
-                    <div class="message-avatar">
-                        <img src="${nutritionistAvatar}" alt="Nutritionist">
-                    </div>
-                ` : ''}
-                <div class="message-content">
-                    <div class="message-sender">${message.sender === 'nutritionist' ? this.data.chat.nutritionist.name : 'You'}</div>
-                    <div class="message-text">${message.text}</div>
-                    <div class="message-time">${message.time}</div>
-                </div>
-                ${message.sender === 'patient' ? `
-                    <div class="message-avatar">
-                        <img src="${patientAvatar}" alt="Patient">
-                    </div>
-                ` : ''}
-            </div>
-        `).join('');
-    }
-
-    // Progress Section
-    renderProgress() {
-        this.renderProgressSummary();
-        this.renderProgressCharts();
-        this.renderProgressBadges();
-    }
-
-    renderProgressSummary() {
-        const progressSummary = document.getElementById('progress-summary');
-        const summary = this.data.progress.summary;
-
-        progressSummary.innerHTML = `
-            <div class="summary-item">
-                <span class="summary-value">${summary.streak}</span>
-                <span class="summary-label">Days Streak</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-value">${summary.goals}</span>
-                <span class="summary-label">Goals Achieved</span>
-            </div>
-        `;
-    }
-
-    renderProgressCharts() {
-        const chartsContainer = document.getElementById('progress-charts');
-        const charts = this.data.progress.charts;
-
-        chartsContainer.innerHTML = charts.map(chart => `
-            <div class="chart-card">
-                <h3>${chart.title}</h3>
-                <div class="chart-placeholder" id="${chart.id}">
-                    <p>Chart visualization would appear here</p>
-                    <p><small>In a real application, this would show your ${chart.title.toLowerCase()} data</small></p>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    renderProgressBadges() {
-        const badgesContainer = document.getElementById('progress-badges');
-        const badges = this.data.progress.badges;
-
-        badgesContainer.innerHTML = badges.map(badge => `
-            <div class="badge">
-                <i class="${badge.icon}"></i>
-                <span>${badge.label}</span>
-            </div>
-        `).join('');
-    }
-
-    // Nutritionist Section
-    renderNutritionist() {
-        this.renderNutritionistProfile();
-        this.renderNextSession();
-        this.renderReviewSection();
-        this.renderReviewsSection();
-    }
-
-    renderNutritionistProfile() {
-        const profileElement = document.getElementById('nutritionist-profile');
-        const profile = this.data.nutritionist.profile;
-
-        profileElement.innerHTML = `
+// UPDATE NUTRITIONIST UI WITH REAL DATA
+function updateNutritionistUI(nutritionistData) {
+    console.log('🎨 Updating nutritionist UI with real data...');
+    
+    const nutritionistProfile = document.getElementById('nutritionist-profile');
+    if (nutritionistProfile) {
+        nutritionistProfile.innerHTML = `
             <div class="profile-header">
-                <img src="${profile.avatar}" alt="${profile.name}" class="profile-avatar">
+                <div class="profile-avatar">${nutritionistData.name ? nutritionistData.name.charAt(0) : 'N'}</div>
                 <div class="profile-info">
-                    <h3>${profile.name}</h3>
-                    <p class="specialization">${profile.specialization}</p>
+                    <h3>${nutritionistData.name || 'Your Nutritionist'}</h3>
+                    <p class="specialization">${nutritionistData.specialization || 'Certified Nutritionist'}</p>
                     <div class="rating">
-                        ${this.renderStarRating(profile.rating)}
-                        <span>${profile.rating} (${profile.reviews} reviews)</span>
+                        ${renderStarRating(nutritionistData.rating || 4.5)}
+                        <span>${nutritionistData.rating || 4.5} (${nutritionistData.reviews || 0} reviews)</span>
                     </div>
                 </div>
             </div>
             <div class="profile-details">
-                ${this.renderQualifications()}
-                ${this.renderSpecializations()}
-                ${this.renderAvailability()}
-                ${this.renderContactInfo()}
+                ${renderNutritionistQualifications(nutritionistData)}
+                ${renderNutritionistContact(nutritionistData)}
             </div>
         `;
     }
-
-    renderQualifications() {
-        const qualifications = this.data.nutritionist.qualifications;
-        return `
-            <div class="detail-item">
-                <h4>Qualifications</h4>
-                <ul>
-                    ${qualifications.map(qual => `<li>${qual}</li>`).join('')}
-                </ul>
-            </div>
+    
+    // Update nutritionist status in chat
+    const nutritionistStatus = document.getElementById('nutritionist-status');
+    if (nutritionistStatus) {
+        nutritionistStatus.innerHTML = `
+            <i class="fas fa-circle"></i>
+            <span>${nutritionistData.name || 'Nutritionist'} is Online</span>
         `;
-    }
-
-    renderSpecializations() {
-        const specializations = this.data.nutritionist.specializations;
-        return `
-            <div class="detail-item">
-                <h4>Specializations</h4>
-                <div class="specialization-tags">
-                    ${specializations.map(spec => `<span class="tag">${spec}</span>`).join('')}
-                </div>
-            </div>
-        `;
-    }
-
-    renderAvailability() {
-        const availability = this.data.nutritionist.availability;
-        return `
-            <div class="detail-item">
-                <h4>Availability</h4>
-                <div class="availability">
-                    ${availability.map(avail => `
-                        <div class="availability-item">
-                            <span class="day">${avail.days}</span>
-                            <span class="time">${avail.time}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-
-    renderContactInfo() {
-        const contact = this.data.nutritionist.contact;
-        return `
-            <div class="detail-item">
-                <h4>Contact Information</h4>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>${contact.email}</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <span>${contact.phone}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    renderNextSession() {
-        const nextSessionElement = document.getElementById('next-session');
-        const session = this.data.nutritionist.nextSession;
-
-        nextSessionElement.innerHTML = `
-            <h3>Your Next Session</h3>
-            <div class="session-card">
-                <div class="session-date">
-                    <span class="date">${session.date}</span>
-                    <span class="month">${session.month}</span>
-                </div>
-                <div class="session-details">
-                    <h4>${session.title}</h4>
-                    <p><i class="far fa-clock"></i> ${session.time}</p>
-                    <p><i class="fas fa-video"></i> ${session.type}</p>
-                </div>
-                <button class="btn-outline" id="reschedule-session">
-                    <i class="fas fa-edit"></i>
-                    Reschedule
-                </button>
-            </div>
-        `;
-    }
-
-    renderReviewSection() {
-        const reviewSection = document.getElementById('review-section');
-        const userReview = this.data.nutritionist.reviews.userReview;
-
-        reviewSection.innerHTML = `
-            <div class="review-header">
-                <h3>Leave a Review</h3>
-                <button class="btn-primary" id="write-review-btn">
-                    <i class="fas fa-pen"></i>
-                    Write Review
-                </button>
-            </div>
-            
-            ${userReview.exists ? this.renderUserReview(userReview) : ''}
-            
-            <div class="review-form-container" id="review-form" style="display: none;">
-                ${this.renderReviewForm()}
-            </div>
-        `;
-    }
-
-    renderUserReview(review) {
-        return `
-            <div class="user-review" id="user-review">
-                <h4>Your Review</h4>
-                <div class="review-card">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <img src="${this.data.patient.avatar}" alt="${this.data.patient.name}" class="reviewer-avatar">
-                            <div>
-                                <div class="reviewer-name">${this.data.patient.name}</div>
-                                <div class="review-date">${review.date}</div>
-                            </div>
-                        </div>
-                        <div class="review-rating">
-                            ${this.renderStarRating(review.rating)}
-                            <span>${review.rating}.0</span>
-                        </div>
-                    </div>
-                    <h5 class="review-title">${review.title}</h5>
-                    <p class="review-content">${review.content}</p>
-                    <div class="review-actions">
-                        <button class="btn-text edit-review">
-                            <i class="fas fa-edit"></i>
-                            Edit
-                        </button>
-                        <button class="btn-text delete-review">
-                            <i class="fas fa-trash"></i>
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    renderReviewForm() {
-        return `
-            <h4>How was your experience?</h4>
-            <div class="rating-input">
-                <span>Your Rating:</span>
-                <div class="star-rating">
-                    <i class="far fa-star" data-rating="1"></i>
-                    <i class="far fa-star" data-rating="2"></i>
-                    <i class="far fa-star" data-rating="3"></i>
-                    <i class="far fa-star" data-rating="4"></i>
-                    <i class="far fa-star" data-rating="5"></i>
-                </div>
-                <span class="rating-text">Select rating</span>
-            </div>
-            <div class="form-group">
-                <label for="review-title">Review Title</label>
-                <input type="text" id="review-title" placeholder="Summarize your experience">
-            </div>
-            <div class="form-group">
-                <label for="review-text">Your Review</label>
-                <textarea id="review-text" placeholder="Share details of your experience..." rows="4"></textarea>
-            </div>
-            <div class="form-actions">
-                <button class="btn-outline" id="cancel-review">Cancel</button>
-                <button class="btn-primary" id="submit-review">Submit Review</button>
-            </div>
-        `;
-    }
-
-    renderReviewsSection() {
-        const reviewsSection = document.getElementById('reviews-section');
-        const reviews = this.data.nutritionist.reviews;
-
-        reviewsSection.innerHTML = `
-            <div class="section-header">
-                <h3>What Other Patients Say</h3>
-                <div class="reviews-stats">
-                    <div class="overall-rating">
-                        <div class="rating-number">${reviews.overall}</div>
-                        <div class="rating-stars">
-                            ${this.renderStarRating(reviews.overall)}
-                        </div>
-                        <div class="rating-count">${reviews.total} reviews</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="reviews-filter" id="reviews-filter">
-                <button class="filter-btn active">All</button>
-                <button class="filter-btn">5 Star</button>
-                <button class="filter-btn">4 Star</button>
-                <button class="filter-btn">3 Star</button>
-                <button class="filter-btn">2 Star</button>
-                <button class="filter-btn">1 Star</button>
-            </div>
-
-            <div class="reviews-list" id="reviews-list">
-                ${this.renderOtherReviews(reviews.otherReviews)}
-            </div>
-
-            <div class="reviews-footer">
-                <button class="btn-outline" id="load-more-reviews">
-                    <i class="fas fa-arrow-down"></i>
-                    Load More Reviews
-                </button>
-            </div>
-        `;
-    }
-
-    renderOtherReviews(reviews) {
-        return reviews.map(review => `
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="reviewer-info">
-                        <img src="${review.avatar}" alt="${review.name}" class="reviewer-avatar">
-                        <div>
-                            <div class="reviewer-name">${review.name}</div>
-                            <div class="review-date">${review.date}</div>
-                        </div>
-                    </div>
-                    <div class="review-rating">
-                        ${this.renderStarRating(review.rating)}
-                        <span>${review.rating}.0</span>
-                    </div>
-                </div>
-                <h5 class="review-title">${review.title}</h5>
-                <p class="review-content">${review.content}</p>
-            </div>
-        `).join('');
-    }
-
-    renderStarRating(rating) {
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-        let stars = '';
-        
-        // Full stars
-        for (let i = 0; i < fullStars; i++) {
-            stars += '<i class="fas fa-star"></i>';
-        }
-        
-        // Half star
-        if (hasHalfStar) {
-            stars += '<i class="fas fa-star-half-alt"></i>';
-        }
-        
-        // Empty stars
-        for (let i = 0; i < emptyStars; i++) {
-            stars += '<i class="far fa-star"></i>';
-        }
-        
-        return stars;
-    }
-
-    // Utility Methods
-    capitalizeFirst(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    // Event Listeners Setup
-    setupEventListeners() {
-        this.setupTabNavigation();
-        this.setupChatEvents();
-        this.setupReviewEvents();
-        this.setupButtonEvents();
-    }
-
-    setupTabNavigation() {
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.tab')) {
-                const tab = e.target.closest('.tab');
-                const targetTab = tab.getAttribute('data-tab');
-                this.activateTab(targetTab);
-            }
-        });
-    }
-
-    activateTab(tabId) {
-        // Update tabs
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-
-        // Update content
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
-
-        this.currentTab = tabId;
-    }
-
-    setupChatEvents() {
-        // Chat functionality from previous implementation
-        const chatInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-message');
-
-        const sendMessage = () => {
-            const messageText = chatInput.value.trim();
-            if (messageText) {
-                this.addMessageToChat('patient', messageText);
-                chatInput.value = '';
-                
-                // Simulate nutritionist reply
-                setTimeout(() => {
-                    this.simulateNutritionistReply();
-                }, 1500);
-            }
-        };
-
-        sendButton.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        // Video call button
-        document.getElementById('video-call').addEventListener('click', () => {
-            this.showNotification('Starting video call with Dr. Wilson...');
-        });
-    }
-
-    addMessageToChat(sender, text) {
-        const chatHistory = document.getElementById('chat-history');
-        const message = {
-            sender,
-            text,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-
-        const messageElement = this.createMessageElement(message);
-        chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-
-        // Add to data (in real app, this would be sent to server)
-        this.data.chat.messages.push(message);
-    }
-
-    createMessageElement(message) {
-        const patientAvatar = this.data.patient.avatar;
-        const nutritionistAvatar = this.data.chat.nutritionist.avatar;
-
-        return document.createRange().createContextualFragment(`
-            <div class="message ${message.sender}-message">
-                ${message.sender === 'nutritionist' ? `
-                    <div class="message-avatar">
-                        <img src="${nutritionistAvatar}" alt="Nutritionist">
-                    </div>
-                ` : ''}
-                <div class="message-content">
-                    <div class="message-sender">${message.sender === 'nutritionist' ? this.data.chat.nutritionist.name : 'You'}</div>
-                    <div class="message-text">${message.text}</div>
-                    <div class="message-time">${message.time}</div>
-                </div>
-                ${message.sender === 'patient' ? `
-                    <div class="message-avatar">
-                        <img src="${patientAvatar}" alt="Patient">
-                    </div>
-                ` : ''}
-            </div>
-        `);
-    }
-
-    simulateNutritionistReply() {
-        const replies = [
-            "Thanks for the update! How are you feeling with the current meal plan?",
-            "That's great to hear! Remember to stay hydrated throughout the day.",
-            "I'm glad it's working well for you. Any challenges with any specific meals?",
-            "Excellent progress! Let me know if you need any adjustments to your plan."
-        ];
-        
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
-        this.addMessageToChat('nutritionist', randomReply);
-    }
-
-    setupReviewEvents() {
-        // Review system functionality from previous implementation
-        // This would include all the review form handling, star ratings, etc.
-        // For brevity, I'm including the core structure - you can add the detailed review logic here
-    }
-
-    setupButtonEvents() {
-        // Download plan button
-        document.getElementById('download-plan').addEventListener('click', () => {
-            this.showNotification('Downloading your diet plan...');
-        });
-
-        // Book session button
-        document.getElementById('book-session').addEventListener('click', () => {
-            this.showNotification('Opening appointment scheduler...');
-        });
-    }
-
-    showNotification(message, type = 'info') {
-        // Notification system from previous implementation
-        const notification = document.createElement('div');
-        notification.textContent = message;
-        
-        const colors = {
-            success: '#28A745',
-            warning: '#FFC107',
-            error: '#DC3545',
-            info: '#1E90FF'
-        };
-        
-        notification.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: ${colors[type] || colors.info};
-            color: white;
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            max-width: 300px;
-        `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    document.body.removeChild(notification);
-                }
-            }, 300);
-        }, 3000);
+        nutritionistStatus.className = 'nutritionist-status online';
     }
 }
 
-// Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new SmartDietApp();
-});
+// RENDER NUTRITIONIST QUALIFICATIONS
+function renderNutritionistQualifications(nutritionistData) {
+    const qualifications = nutritionistData.qualifications || ['Registered Dietitian', 'Certified Nutrition Specialist'];
+    const specializations = nutritionistData.specializations || ['Weight Management', 'Sports Nutrition'];
+    
+    return `
+        <div class="detail-item">
+            <h4>Qualifications</h4>
+            <ul>
+                ${qualifications.map(qual => `<li>${qual}</li>`).join('')}
+            </ul>
+        </div>
+        <div class="detail-item">
+            <h4>Specializations</h4>
+            <div class="specialization-tags">
+                ${specializations.map(spec => `<span class="tag">${spec}</span>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// RENDER NUTRITIONIST CONTACT INFO
+function renderNutritionistContact(nutritionistData) {
+    return `
+        <div class="detail-item">
+            <h4>Contact Information</h4>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>${nutritionistData.email || 'contact@smartdiet.com'}</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>${nutritionistData.phone || '+1 (555) 123-4567'}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// UPDATE PROGRESS SUMMARY WITH REAL DATA
+function updateProgressSummary(patientData) {
+    const progressSummary = document.getElementById('progress-summary');
+    if (progressSummary) {
+        progressSummary.innerHTML = `
+            <div class="summary-item">
+                <span class="summary-value">${patientData.daysFollowing || 0}</span>
+                <span class="summary-label">Days Following Plan</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${patientData.adherence || 0}%</span>
+                <span class="summary-label">Plan Adherence</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${patientData.progress || '0kg'}</span>
+                <span class="summary-label">Progress</span>
+            </div>
+        `;
+    }
+    
+    // Update progress charts section
+    updateProgressCharts(patientData);
+}
+
+// UPDATE PROGRESS CHARTS
+function updateProgressCharts(patientData) {
+    const progressCharts = document.getElementById('progress-charts');
+    if (progressCharts) {
+        progressCharts.innerHTML = `
+            <div class="chart-card">
+                <h3>Weight Progress</h3>
+                <div class="chart-placeholder">
+                    <p>${patientData.progress || 'No progress data yet'}</p>
+                    <p><small>Your nutritionist will track your weight progress here</small></p>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Nutrition Adherence</h3>
+                <div class="chart-placeholder">
+                    <p>Adherence: ${patientData.adherence || 0}%</p>
+                    <p><small>Based on your meal plan compliance</small></p>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Weekly Summary</h3>
+                <div class="chart-placeholder">
+                    <p>${patientData.daysFollowing || 0} days active this week</p>
+                    <p><small>Keep up the good work!</small></p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// STAR RATING HELPER FUNCTION
+function renderStarRating(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    let stars = '';
+    
+    for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fas fa-star"></i>';
+    }
+    
+    if (hasHalfStar) {
+        stars += '<i class="fas fa-star-half-alt"></i>';
+    }
+    
+    for (let i = 0; i < emptyStars; i++) {
+        stars += '<i class="far fa-star"></i>';
+    }
+    
+    return stars;
+}
+
+// LOAD DIET PLAN FROM FIRESTORE
+async function loadDietPlan(patientId) {
+    try {
+        const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+        
+        const dietPlanRef = doc(db, 'dietPlans', patientId);
+        const dietPlanSnap = await getDoc(dietPlanRef);
+        
+        if (dietPlanSnap.exists()) {
+            const dietPlan = dietPlanSnap.data();
+            console.log('📝 Diet plan loaded:', dietPlan);
+            renderDietPlan(dietPlan);
+        } else {
+            renderNoDietPlan();
+        }
+        
+    } catch (error) {
+        console.error('Error loading diet plan:', error);
+        renderNoDietPlan();
+    }
+}
+
+// RENDER DIET PLAN
+function renderDietPlan(dietPlan) {
+    const mealCards = document.getElementById('meal-cards');
+    if (!mealCards) return;
+
+    const meals = [
+        { type: 'breakfast', icon: 'fas fa-sun', time: '8:00 AM' },
+        { type: 'lunch', icon: 'fas fa-utensils', time: '1:00 PM' },
+        { type: 'dinner', icon: 'fas fa-moon', time: '7:00 PM' },
+        { type: 'snacks', icon: 'fas fa-apple-alt', time: 'As needed' }
+    ];
+
+    mealCards.innerHTML = meals.map(meal => {
+        const mealData = dietPlan[meal.type];
+        if (!mealData) {
+            return `
+                <div class="meal-card">
+                    <div class="meal-header">
+                        <h3><i class="${meal.icon}"></i> ${capitalizeFirst(meal.type)}</h3>
+                        <span class="meal-time">${meal.time}</span>
+                    </div>
+                    <div class="meal-content">
+                        <p>No ${meal.type} plan assigned yet.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="meal-card">
+                <div class="meal-header">
+                    <h3><i class="${meal.icon}"></i> ${capitalizeFirst(meal.type)}</h3>
+                    <span class="meal-time">${meal.time}</span>
+                </div>
+                <div class="meal-content">
+                    <h4>${mealData.name || 'Meal'}</h4>
+                    <p class="meal-description">${mealData.description || 'Description not available'}</p>
+                    <div class="nutrition-info">
+                        ${renderNutritionInfo(mealData.nutrition || {})}
+                    </div>
+                </div>
+                ${mealData.notes ? `
+                    <div class="nutritionist-notes">
+                        <h5><i class="fas fa-sticky-note"></i> Nutritionist's Notes</h5>
+                        <p>${mealData.notes}</p>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+// RENDER NO DIET PLAN MESSAGE
+function renderNoDietPlan() {
+    const mealCards = document.getElementById('meal-cards');
+    if (mealCards) {
+        mealCards.innerHTML = `
+            <div class="no-diet-plan">
+                <h3>No Diet Plan Assigned Yet</h3>
+                <p>Your nutritionist will create a personalized diet plan for you soon.</p>
+                <p><small>Check back later or message your nutritionist for updates.</small></p>
+            </div>
+        `;
+    }
+}
+
+// RENDER NUTRITION INFO
+function renderNutritionInfo(nutrition) {
+    return Object.entries(nutrition).map(([key, value]) => `
+        <div class="nutrition-item">
+            <span class="nutrition-value">${value}</span>
+            <span class="nutrition-label">${capitalizeFirst(key)}</span>
+        </div>
+    `).join('');
+}
+
+// UTILITY FUNCTION
+function capitalizeFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// SETUP ALL FEATURES
+function setupAllFeatures() {
+    console.log('⚙️ Setting up all features...');
+    
+    setupNavigation();
+    setupChat();
+    setupButtons();
+    loadDietPlan(auth.currentUser.uid); // Load patient's diet plan
+    
+    console.log('✅ All features setup complete');
+}
+
+// ... (Keep your existing setupNavigation, setupChat, setupButtons functions exactly as they were)
+
+// 1. NAVIGATION
+function setupNavigation() {
+    console.log('🔧 Setting up navigation...');
+    
+    const menuItems = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('.tab-content');
+    
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('📱 Navigation clicked:', this.getAttribute('data-tab'));
+            
+            // Remove active from all
+            menuItems.forEach(i => i.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            
+            // Add active to clicked
+            this.classList.add('active');
+            const targetId = this.getAttribute('data-tab');
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        });
+    });
+}
+
+// 2. CHAT FUNCTIONALITY
+function setupChat() {
+    console.log('🔧 Setting up chat...');
+    
+    const sendBtn = document.getElementById('send-message');
+    const chatInput = document.getElementById('message-input');
+    
+    if (sendBtn && chatInput) {
+        sendBtn.addEventListener('click', function() {
+            sendMessage();
+        });
+        
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const messages = document.getElementById('chat-history');
+    
+    if (input.value.trim()) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message patient-message';
+        messageDiv.innerHTML = `
+            <p>${input.value}</p>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        `;
+        
+        if (messages) {
+            // If it's the no-messages placeholder, clear it first
+            if (messages.querySelector('.no-messages')) {
+                messages.innerHTML = '';
+            }
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        input.value = '';
+        
+        // Simulate nutritionist reply after 1 second
+        setTimeout(() => {
+            simulateNutritionistReply();
+        }, 1000);
+    }
+}
+
+function simulateNutritionistReply() {
+    const messages = document.getElementById('chat-history');
+    const replies = [
+        "Thanks for your message! I'll review your progress and get back to you.",
+        "That's great to hear! Keep up the good work with your diet plan.",
+        "I've reviewed your progress. Let's schedule a call to discuss adjustments.",
+        "Your adherence to the plan is excellent! Any challenges you're facing?"
+    ];
+    
+    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+    
+    if (messages) {
+        const replyDiv = document.createElement('div');
+        replyDiv.className = 'message nutritionist-message';
+        replyDiv.innerHTML = `
+            <p>${randomReply}</p>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        `;
+        messages.appendChild(replyDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+// 3. BUTTONS
+function setupButtons() {
+    console.log('🔧 Setting up buttons...');
+    
+    // Download Plan button
+    const downloadBtn = document.getElementById('download-plan');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            alert('Downloading diet plan as PDF...');
+        });
+    }
+    
+    // Book Session button
+    const bookSession = document.getElementById('book-session');
+    if (bookSession) {
+        bookSession.addEventListener('click', function() {
+            alert('Opening appointment scheduler...');
+        });
+    }
+    
+    // Video call button
+    const videoCall = document.getElementById('video-call');
+    if (videoCall) {
+        videoCall.addEventListener('click', function() {
+            alert('Starting video call with nutritionist...');
+        });
+    }
+}

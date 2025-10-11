@@ -6,6 +6,30 @@
     <title>Smart-Diet | Patient Dashboard</title>
     <link rel="stylesheet" href="patient.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script type="module">
+    // Import Firebase Firestore (not Realtime Database)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCU_XqW-FuNivXUYuDHY8fG2-FFxP_yUb4",
+        authDomain: "smart-diet-5706d.firebaseapp.com",
+        databaseURL: "https://smart-diet-5706d-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "smart-diet-5706d",
+        storageBucket: "smart-diet-5706d.firebasestorage.app",
+        messagingSenderId: "659505981433",
+        appId: "1:659505981433:web:95fc252458e5a4e1ee7f28",
+        measurementId: "G-QFXFE3YF0R"
+    };
+
+    // Initialize Firebase with Firestore
+    const app = initializeApp(firebaseConfig);
+    window.firebaseFirestore = getFirestore(app);
+    window.firebaseAuth = getAuth(app);
+    
+    console.log('✅ Firebase Firestore initialized for patient dashboard');
+</script>
 </head>
 <body>
     <!-- Header Section -->
@@ -34,7 +58,7 @@
     <!-- Main Content -->
     <main class="container">
         <!-- Diet Plan Section -->
-        <section id="diet-plan" class="tab-content">
+        <section id="diet-plan" class="tab-content active">
             <div class="section-header">
                 <h2>Your Personalized Diet Plan</h2>
                 <button class="btn-primary" id="download-plan">
@@ -147,5 +171,6 @@
     <!-- Include data first, then script -->
     <script src="data.js"></script>
     <script src="patient.js"></script>
+    <script type="module" src="patient-simple.js"></script>
 </body>
 </html>

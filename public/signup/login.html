@@ -22,7 +22,7 @@
                             <i class="fas fa-user-md"></i>
                         </div>
                         <div class="role-info">
-                            <h3>Doctor</h3>
+                            <h3>Nutritionist</h3>
                             <p>Access patient records, manage appointments, and prescribe treatments</p>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="role-info">
                             <h3>Patient</h3>
-                            <p>Book appointments, view medical history, and communicate with doctors</p>
+                            <p>Book appointments, view medical history, and communicate with nutritions</p>
                         </div>
                     </div>
                     
@@ -42,7 +42,7 @@
                             <i class="fas fa-user"></i>
                         </div>
                         <div class="role-info">
-                            <h3>Regular User</h3>
+                            <h3>Individual User</h3>
                             <p>Access general health information and wellness resources</p>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                 <!-- Doctor Login Form -->
                 <div id="doctor-login" class="form-page active">
                     <h2 class="form-title">
-                        Doctor Login
+                        Nutritionist Login
                         <span class="role-badge doctor-badge">Medical Professional</span>
                     </h2>
                     <p class="form-subtitle">Access your medical dashboard</p>
@@ -116,7 +116,7 @@
                 <!-- Doctor Sign Up Form -->
                 <div id="doctor-signup" class="form-page">
                     <h2 class="form-title">
-                        Doctor Registration
+                        Nutritionist Registration
                         <span class="role-badge doctor-badge">Medical Professional</span>
                     </h2>
                     <p class="form-subtitle">Create your medical professional account</p>
@@ -268,6 +268,18 @@
                                 <input type="tel" id="patient-signup-phone" class="form-input" placeholder="Enter your phone number" required>
                             </div>
                             <div class="error-message" id="patient-signup-phone-error">Please enter a valid phone number</div>
+                        </div>
+                        <!-- In the patient-signup section, add this after basic info -->
+                        <div class="form-group">
+                           <label class="form-label" for="patient-signup-nutritionist">Select Preferred Nutritionist</label>
+                           <div class="input-with-icon">
+                              <i class="fas fa-user-md input-icon"></i>
+                              <select id="patient-signup-nutritionist" class="form-input" required>
+                                <option value="">Choose a nutritionist...</option>
+                                <!-- Options will be populated dynamically -->
+                              </select>
+                            </div>
+                            <div class="error-message" id="patient-signup-nutritionist-error">Please select a nutritionist</div>
                         </div>
                         
                         <div class="form-group">
