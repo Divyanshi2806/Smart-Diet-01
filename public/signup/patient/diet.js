@@ -1,4 +1,4 @@
-const API_KEY = "f5045040872e4ca19a52b20c66bb614a"; // replace with your key
+const API_KEY = "dd112c91acc5467ea95d20a0fd8f8bad"; // replace with your key
 let userProfile = null;
 
 document.getElementById("user-form").addEventListener("submit", (e) => {
