@@ -671,6 +671,13 @@ body {
     display: none;
 }
 
+.note {
+    color: #6b7280;
+    font-size: 0.95rem;
+    text-align: center;
+    
+}
+
 /* Responsive Design */
 @media (max-width: 900px) {
     .auth-container {
