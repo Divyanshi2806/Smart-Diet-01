@@ -1,4 +1,3 @@
-// script.js
 function getStarted() {
   window.location.href = "start.html";
 }

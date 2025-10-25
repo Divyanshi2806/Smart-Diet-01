@@ -1,11 +1,7 @@
-// patient.js - Updated to use Firestore and show real data
 console.log('🔧 Loading patient.js...');
-
-// Use Firebase from HTML initialization
 const db = window.firebaseFirestore;
 const auth = window.firebaseAuth;
 
-// Wait for DOM to load
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DOM loaded, initializing patient dashboard...');
     initializePatientDashboard();
@@ -19,15 +15,10 @@ async function initializePatientDashboard() {
         return;
     }
     
-    // Check authentication
     auth.onAuthStateChanged(async (user) => {
         if (user) {
-            console.log('👤 Patient logged in:', user.uid);
-            
-            // Load patient data and assigned nutritionist
+            console.log('👤 Patient logged in:', user.uid);           
             await loadPatientData(user.uid);
-            
-            // Setup all functionality
             setupAllFeatures();
             
         } else {
@@ -36,12 +27,9 @@ async function initializePatientDashboard() {
     });
 }
 
-// LOAD PATIENT DATA AND NUTRITIONIST INFO
 async function loadPatientData(patientId) {
     try {
         const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
-        
-        // Load patient data
         const patientRef = doc(db, 'patients', patientId);
         const patientSnap = await getDoc(patientRef);
         
@@ -49,14 +37,11 @@ async function loadPatientData(patientId) {
             const patientData = patientSnap.data();
             console.log('📋 Patient data loaded:', patientData);
             
-            // Load assigned nutritionist data
             if (patientData.assignedNutritionist) {
                 await loadNutritionistData(patientData.assignedNutritionist);
             } else if (patientData.requestedNutritionist) {
                 await loadNutritionistData(patientData.requestedNutritionist);
             }
-            
-            // Update dashboard with patient data
             updatePatientDashboard(patientData);
         } else {
             console.log('❌ No patient data found');
@@ -67,7 +52,6 @@ async function loadPatientData(patientId) {
     }
 }
 
-// LOAD NUTRITIONIST DATA
 async function loadNutritionistData(nutritionistId) {
     try {
         const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
@@ -79,7 +63,6 @@ async function loadNutritionistData(nutritionistId) {
             const nutritionistData = nutritionistSnap.data();
             console.log('👨‍⚕️ Nutritionist data loaded:', nutritionistData);
             
-            // Update UI with nutritionist data
             updateNutritionistUI(nutritionistData);
         }
         
@@ -88,11 +71,8 @@ async function loadNutritionistData(nutritionistId) {
     }
 }
 
-// UPDATE PATIENT DASHBOARD WITH REAL DATA
 function updatePatientDashboard(patientData) {
     console.log('🎨 Updating patient dashboard with real data...');
-    
-    // Update header with patient name
     const userInfo = document.getElementById('user-info');
     if (userInfo && patientData.name) {
         userInfo.innerHTML = `
@@ -103,12 +83,9 @@ function updatePatientDashboard(patientData) {
             <div class="user-avatar">${patientData.name.charAt(0)}</div>
         `;
     }
-    
-    // Update progress summary with real data
     updateProgressSummary(patientData);
 }
 
-// UPDATE NUTRITIONIST UI WITH REAL DATA
 function updateNutritionistUI(nutritionistData) {
     console.log('🎨 Updating nutritionist UI with real data...');
     
@@ -132,8 +109,7 @@ function updateNutritionistUI(nutritionistData) {
             </div>
         `;
     }
-    
-    // Update nutritionist status in chat
+
     const nutritionistStatus = document.getElementById('nutritionist-status');
     if (nutritionistStatus) {
         nutritionistStatus.innerHTML = `
@@ -143,8 +119,6 @@ function updateNutritionistUI(nutritionistData) {
         nutritionistStatus.className = 'nutritionist-status online';
     }
 }
-
-// RENDER NUTRITIONIST QUALIFICATIONS
 function renderNutritionistQualifications(nutritionistData) {
     const qualifications = nutritionistData.qualifications || ['Registered Dietitian', 'Certified Nutrition Specialist'];
     const specializations = nutritionistData.specializations || ['Weight Management', 'Sports Nutrition'];
@@ -165,7 +139,6 @@ function renderNutritionistQualifications(nutritionistData) {
     `;
 }
 
-// RENDER NUTRITIONIST CONTACT INFO
 function renderNutritionistContact(nutritionistData) {
     return `
         <div class="detail-item">
@@ -184,7 +157,6 @@ function renderNutritionistContact(nutritionistData) {
     `;
 }
 
-// UPDATE PROGRESS SUMMARY WITH REAL DATA
 function updateProgressSummary(patientData) {
     const progressSummary = document.getElementById('progress-summary');
     if (progressSummary) {
@@ -203,12 +175,9 @@ function updateProgressSummary(patientData) {
             </div>
         `;
     }
-    
-    // Update progress charts section
     updateProgressCharts(patientData);
 }
 
-// UPDATE PROGRESS CHARTS
 function updateProgressCharts(patientData) {
     const progressCharts = document.getElementById('progress-charts');
     if (progressCharts) {
@@ -238,7 +207,6 @@ function updateProgressCharts(patientData) {
     }
 }
 
-// STAR RATING HELPER FUNCTION
 function renderStarRating(rating) {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -261,7 +229,6 @@ function renderStarRating(rating) {
     return stars;
 }
 
-// LOAD DIET PLAN FROM FIRESTORE
 async function loadDietPlan(patientId) {
     try {
         const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
@@ -283,7 +250,6 @@ async function loadDietPlan(patientId) {
     }
 }
 
-// RENDER DIET PLAN
 function renderDietPlan(dietPlan) {
     const mealCards = document.getElementById('meal-cards');
     if (!mealCards) return;
@@ -335,7 +301,6 @@ function renderDietPlan(dietPlan) {
     }).join('');
 }
 
-// RENDER NO DIET PLAN MESSAGE
 function renderNoDietPlan() {
     const mealCards = document.getElementById('meal-cards');
     if (mealCards) {
@@ -349,7 +314,6 @@ function renderNoDietPlan() {
     }
 }
 
-// RENDER NUTRITION INFO
 function renderNutritionInfo(nutrition) {
     return Object.entries(nutrition).map(([key, value]) => `
         <div class="nutrition-item">
@@ -359,26 +323,21 @@ function renderNutritionInfo(nutrition) {
     `).join('');
 }
 
-// UTILITY FUNCTION
 function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// SETUP ALL FEATURES
 function setupAllFeatures() {
     console.log('⚙️ Setting up all features...');
     
     setupNavigation();
     setupChat();
     setupButtons();
-    loadDietPlan(auth.currentUser.uid); // Load patient's diet plan
+    loadDietPlan(auth.currentUser.uid);
     
     console.log('✅ All features setup complete');
 }
 
-// ... (Keep your existing setupNavigation, setupChat, setupButtons functions exactly as they were)
-
-// 1. NAVIGATION
 function setupNavigation() {
     console.log('🔧 Setting up navigation...');
     
@@ -405,7 +364,6 @@ function setupNavigation() {
     });
 }
 
-// 2. CHAT FUNCTIONALITY
 function setupChat() {
     console.log('🔧 Setting up chat...');
     
@@ -438,7 +396,6 @@ function sendMessage() {
         `;
         
         if (messages) {
-            // If it's the no-messages placeholder, clear it first
             if (messages.querySelector('.no-messages')) {
                 messages.innerHTML = '';
             }
@@ -447,8 +404,6 @@ function sendMessage() {
         }
         
         input.value = '';
-        
-        // Simulate nutritionist reply after 1 second
         setTimeout(() => {
             simulateNutritionistReply();
         }, 1000);
@@ -478,11 +433,8 @@ function simulateNutritionistReply() {
     }
 }
 
-// 3. BUTTONS
 function setupButtons() {
     console.log('🔧 Setting up buttons...');
-    
-    // Download Plan button
     const downloadBtn = document.getElementById('download-plan');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', function() {
@@ -490,7 +442,6 @@ function setupButtons() {
         });
     }
     
-    // Book Session button
     const bookSession = document.getElementById('book-session');
     if (bookSession) {
         bookSession.addEventListener('click', function() {
@@ -498,7 +449,6 @@ function setupButtons() {
         });
     }
     
-    // Video call button
     const videoCall = document.getElementById('video-call');
     if (videoCall) {
         videoCall.addEventListener('click', function() {

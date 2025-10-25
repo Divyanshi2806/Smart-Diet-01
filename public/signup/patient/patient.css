@@ -32,7 +32,6 @@ body {
     padding: 0 20px;
 }
 
-/* Header Styles */
 header {
     background-color: white;
     box-shadow: var(--shadow);
@@ -90,7 +89,6 @@ header {
     border: 2px solid var(--primary-light);
 }
 
-/* Navigation Tabs */
 .nav-tabs {
     background-color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -130,7 +128,6 @@ header {
     font-size: 1.1rem;
 }
 
-/* Main Content */
 main {
     padding: 30px 0;
 }
@@ -198,7 +195,6 @@ main {
     background-color: rgba(46, 139, 87, 0.1);
 }
 
-/* Diet Plan Section */
 .plan-period-selector {
     display: flex;
     gap: 10px;
@@ -597,7 +593,6 @@ main {
     text-align: center;
 }
 
-/* Nutritionist Information Section */
 .nutritionist-profile {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -769,7 +764,6 @@ main {
     color: var(--gray);
 }
 
-/* Responsive Design */
 @media (max-width: 992px) {
     .progress-content,
     .nutritionist-profile {
@@ -834,16 +828,12 @@ main {
  
 }
 
-/* ... (previous CSS remains the same) ... */
-
-/* Nutritionist Sidebar Layout */
 .nutritionist-sidebar {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-/* Review Section Styles */
 .review-section {
     background-color: white;
     border-radius: var(--border-radius);
@@ -863,7 +853,6 @@ main {
     margin: 0;
 }
 
-/* Review Form */
 .review-form-container {
     background-color: #f8f9fa;
     border-radius: var(--border-radius);
@@ -956,13 +945,11 @@ main {
     background-color: rgba(46, 139, 87, 0.1);
 }
 
-/* User Review */
 .user-review h4 {
     margin-bottom: 15px;
     color: var(--dark);
 }
 
-/* Review Card Styles */
 .review-card {
     background-color: white;
     border: 1px solid #e9ecef;
@@ -1041,7 +1028,6 @@ main {
     padding-top: 15px;
 }
 
-/* Reviews Section */
 .reviews-section {
     margin-top: 40px;
 }
@@ -1114,7 +1100,6 @@ main {
     margin-top: 30px;
 }
 
-/* Responsive Design for Reviews */
 @media (max-width: 768px) {
     .review-header {
         flex-direction: column;

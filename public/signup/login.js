@@ -1,10 +1,8 @@
-// Firebase imports and initialization - UPDATED TO FIRESTORE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCU_XqW-FuNivXUYuDHY8fG2-FFxP_yUb4",
   authDomain: "smart-diet-5706d.firebaseapp.com",
@@ -16,16 +14,13 @@ const firebaseConfig = {
   measurementId: "G-QFXFE3YF0R"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const firestore = getFirestore(app); // USING FIRESTORE
+const firestore = getFirestore(app);
 
-// Export for use in other files
 export { auth, firestore };
 
-// Main application logic
 class AuthApp {
   constructor() {
     this.currentRole = 'doctor';
@@ -37,11 +32,10 @@ class AuthApp {
     console.log('🚀 AuthApp initialized');
     this.bindEvents();
     this.updateFormDisplay();
-    this.loadNutritionistsForSelection(); // Load nutritionists on init
+    this.loadNutritionistsForSelection();
   }
 
   bindEvents() {
-    // Role selection
     document.querySelectorAll('.role-card').forEach(card => {
       card.addEventListener('click', (e) => {
         e.preventDefault();
@@ -53,7 +47,6 @@ class AuthApp {
       });
     });
 
-    // Auth toggle (Login/Signup)
     document.querySelectorAll('.toggle-option').forEach(option => {
       option.addEventListener('click', (e) => {
         e.preventDefault();
@@ -65,7 +58,6 @@ class AuthApp {
       });
     });
 
-    // Auth links inside forms
     document.querySelectorAll('.auth-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -79,7 +71,6 @@ class AuthApp {
       });
     });
 
-    // Password visibility toggle
     document.querySelectorAll('.password-toggle').forEach(toggle => {
       toggle.addEventListener('click', (e) => {
         e.preventDefault();
@@ -94,28 +85,21 @@ class AuthApp {
       });
     });
 
-    // Signup forms
     this.setupSignupForms();
-    
-    // Login forms
     this.setupLoginForms();
   }
 
   updateFormDisplay() {
-    // Hide all form pages
     document.querySelectorAll('.form-page').forEach(page => {
       page.classList.remove('active');
     });
-
-    // Show the current form page
     const currentFormId = `${this.currentRole}-${this.currentAction}`;
     const currentForm = document.getElementById(currentFormId);
     
     if (currentForm) {
       console.log('👁️ Showing form:', currentFormId);
       currentForm.classList.add('active');
-      
-      // Load nutritionists when patient signup form is shown
+
       if (currentFormId === 'patient-signup') {
         this.loadNutritionistsForSelection();
       }
@@ -124,7 +108,6 @@ class AuthApp {
     }
   }
 
-  // LOAD NUTRITIONISTS FOR PATIENT SELECTION
   async loadNutritionistsForSelection() {
     try {
         console.log('🔍 Loading nutritionists from Firestore...');
@@ -203,7 +186,6 @@ class AuthApp {
     });
   }
 
-  // SIGNUP WITH FIRESTORE
   async handleSignup(e, role, form) {
     e.preventDefault();
     console.log(`🎉 === Starting SIGNUP for: ${role} ===`);
@@ -225,7 +207,6 @@ class AuthApp {
       return;
     }
 
-    // Collect all input/select values
     const userData = {};
     form.querySelectorAll('input, select').forEach(el => {
       if (el.type !== 'password' && el.type !== 'checkbox' && el.id) {
@@ -234,18 +215,15 @@ class AuthApp {
       }
     });
     
-    // ADD NUTRITIONIST SELECTION FOR PATIENTS
     userData.role = role;
-    userData.email = email; // Store email in user data
+    userData.email = email;
     userData.createdAt = new Date().toISOString();
     
-    // Set verification status for doctors
     if (role === 'doctor') {
       userData.verificationStatus = 'pending';
       userData.documentsUploaded = false;
     }
     
-    // Store selected nutritionist for patients
     if (role === 'patient') {
       const nutritionistSelect = form.querySelector('#patient-signup-nutritionist');
       if (nutritionistSelect && nutritionistSelect.value) {
@@ -262,12 +240,9 @@ class AuthApp {
       const user = userCredential.user;
       console.log('✅ Firebase user created. UID:', user.uid);
       
-      // Save user data to Firestore
       await setDoc(doc(firestore, 'users', user.uid), userData);
       console.log('✅ User data saved to Firestore');
 
-      // CREATE PATIENT RECORD IF PATIENT SIGNS UP
-      // CREATE PATIENT RECORD IF PATIENT SIGNS UP
 if (role === 'patient') {
     const nutritionistSelect = form.querySelector('#patient-signup-nutritionist');
     const selectedNutritionistId = nutritionistSelect ? nutritionistSelect.value : '';
@@ -277,7 +252,6 @@ if (role === 'patient') {
         return;
     }
 
-    // Get nutritionist name for display
     let nutritionistName = 'Nutritionist';
     try {
         const nutritionistDoc = await getDoc(doc(firestore, 'users', selectedNutritionistId));
@@ -294,19 +268,16 @@ if (role === 'patient') {
         email: email,
         age: userData.age || '',
         phone: userData.phone || '',
-        // CRITICAL: Store the relationship properly
         assignedNutritionist: selectedNutritionistId,
         assignedNutritionistName: nutritionistName,
-        status: 'pending', // pending, approved, rejected
+        status: 'pending',
         assignmentStatus: 'pending',
         createdAt: new Date().toISOString(),
         userType: 'patient'
     };
     
-    // Save to patients collection with user ID as document ID
     await setDoc(doc(firestore, 'patients', user.uid), patientData);
     
-    // ALSO create a request in nutritionist's pending requests
     const requestData = {
         patientId: user.uid,
         patientName: userData.name || 'Patient',
@@ -323,7 +294,6 @@ if (role === 'patient') {
     alert("Account created successfully! Your nutritionist request has been sent.");
     this.redirectToDashboard(role);
 } else {
-        // For doctors and regular users
         if (role === 'doctor') {
           alert("Account created successfully! Please upload your verification documents.");
           window.location.href = "doctor/doctor-dashboard.html";
@@ -355,7 +325,6 @@ if (role === 'patient') {
     }
   }
 
-  // LOGIN WITH FIRESTORE
   async handleLogin(e, role, form) {
     e.preventDefault();
     console.log(`🔐 === Starting LOGIN for: ${role} ===`);
@@ -374,11 +343,9 @@ if (role === 'patient') {
     try {
       let emailToLogin = inputValue;
 
-      // Doctor login with Medical ID or email
       if (role === 'doctor') {
         console.log('🩺 Doctor login - checking medical ID...');
         
-        // Query Firestore for doctor with this medical ID
         const usersRef = collection(firestore, 'users');
         const q = query(usersRef, where("medid", "==", inputValue), where("role", "==", "doctor"));
         const querySnapshot = await getDocs(q);
@@ -433,7 +400,6 @@ if (role === 'patient') {
   }
 }
 
-// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🚀 DOM Content Loaded - Initializing AuthApp...');
   new AuthApp();

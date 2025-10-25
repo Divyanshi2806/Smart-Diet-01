@@ -28,7 +28,6 @@ body::before {
     z-index: -1;
 }
 
-/* Header Styles */
 header {
     background: #1a4829;
     padding: 30px 20px;
@@ -80,7 +79,6 @@ nav a:hover {
     transform: translateY(-2px);
 }
 
-/* Main Container */
 .container {
     display: flex;
     justify-content: center;
@@ -89,7 +87,6 @@ nav a:hover {
     padding: 40px 20px;
 }
 
-/* Verification Wrapper */
 .verification-wrapper {
     width: 800px;
     max-width: 95%;
@@ -128,7 +125,6 @@ nav a:hover {
     color: #fffcfc;
 }
 
-/* Upload Sections */
 .upload-section {
     margin-bottom: 35px;
 }
@@ -205,7 +201,6 @@ nav a:hover {
     box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
-/* Uploaded Files */
 .uploaded-files {
     display: flex;
     flex-wrap: wrap;
@@ -263,7 +258,6 @@ nav a:hover {
     transform: scale(1.2);
 }
 
-/* Submit Section */
 .submit-section {
     text-align: center;
     margin-top: 40px;
@@ -300,7 +294,6 @@ nav a:hover {
     box-shadow: none;
 }
 
-/* Status Messages */
 .status-message {
     text-align: center;
     margin-top: 25px;
@@ -333,7 +326,6 @@ nav a:hover {
     display: block;
 }
 
-/* Footer */
 footer {
     background: rgba(18, 18, 18, 0.9);
     color: #b0b0b0;
@@ -359,7 +351,6 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Animation for file upload */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -370,7 +361,6 @@ footer a:hover {
     animation: pulse 1.5s infinite;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .verification-wrapper {
         padding: 25px;

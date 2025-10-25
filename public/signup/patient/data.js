@@ -1,13 +1,10 @@
-// All dynamic data separated from HTML
 const appData = {
-    // Patient Information
     patient: {
         name: "Deep Kumar",
         status: "Patient",
         avatar: "https://icones.pro/wp-content/uploads/2022/07/icones-d-administration-vert.png"
     },
 
-    // Navigation Tabs
     tabs: [
         { id: "diet-plan", icon: "fas fa-utensils", label: "Diet Plan" },
         { id: "chat", icon: "fas fa-comments", label: "Chat" },

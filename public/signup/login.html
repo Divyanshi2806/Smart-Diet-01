@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <!-- Authentication Container -->
     <div class="auth-container" id="auth-container">
-        <!-- Role Selection Side -->
         <div class="role-side">
             <div class="role-content">
                 <h1 class="role-title">Welcome to SmartDiet</h1>
@@ -54,8 +52,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Form Side -->
+
         <div class="form-side">
             <div class="form-content">
                 <div class="logo">
@@ -63,13 +60,11 @@
                     <span>SmartDiet</span>
                 </div>
                 
-                <!-- Toggle between Login and Sign Up -->
                 <div class="auth-toggle">
                     <div class="toggle-option active" data-action="login">Sign In</div>
                     <div class="toggle-option" data-action="signup">Sign Up</div>
                 </div>
                 
-                <!-- Doctor Login Form -->
                 <div id="doctor-login" class="form-page active">
                     <h2 class="form-title">
                         Nutritionist Login
@@ -113,7 +108,6 @@
                     </form>
                 </div>
                 
-                <!-- Doctor Sign Up Form -->
                 <div id="doctor-signup" class="form-page">
                     <h2 class="form-title">
                         Nutritionist Registration
@@ -181,7 +175,6 @@
                     </form>
                 </div>
                 
-                <!-- Patient Login Form -->
                 <div id="patient-login" class="form-page">
                     <h2 class="form-title">
                         Patient Login
@@ -225,7 +218,6 @@
                     </form>
                 </div>
                 
-                <!-- Patient Sign Up Form -->
                 <div id="patient-signup" class="form-page">
                     <h2 class="form-title">
                         Patient Registration
@@ -269,14 +261,12 @@
                             </div>
                             <div class="error-message" id="patient-signup-phone-error">Please enter a valid phone number</div>
                         </div>
-                        <!-- In the patient-signup section, add this after basic info -->
                         <div class="form-group">
                            <label class="form-label" for="patient-signup-nutritionist">Select Preferred Nutritionist</label>
                            <div class="input-with-icon">
                               <i class="fas fa-user-md input-icon"></i>
                               <select id="patient-signup-nutritionist" class="form-input" required>
                                 <option value="">Choose a nutritionist...</option>
-                                <!-- Options will be populated dynamically -->
                               </select>
                             </div>
                             <div class="error-message" id="patient-signup-nutritionist-error">Please select a nutritionist</div>
@@ -314,7 +304,6 @@
                     </form>
                 </div>
                 
-                <!-- Regular User Login Form -->
                 <div id="user-login" class="form-page">
                     <h2 class="form-title">
                         User Login
@@ -358,7 +347,6 @@
                     </form>
                 </div>
                 
-                <!-- Regular User Sign Up Form -->
                 <div id="user-signup" class="form-page">
                     <h2 class="form-title">
                         User Registration

@@ -1,11 +1,8 @@
-// nutritionist.js - Complete Working Version
 console.log('🔧 Loading nutritionist.js...');
 
-// Use Firebase from HTML initialization
 const db = window.firebaseFirestore;
 const auth = window.firebaseAuth;
 
-// Wait for DOM to load
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DOM loaded, initializing dashboard...');
     initializeDashboard();
@@ -18,13 +15,10 @@ async function initializeDashboard() {
         console.error('❌ Firebase Auth not available');
         return;
     }
-    
-    // Check authentication
+
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             console.log('👤 User logged in:', user.uid);
-            
-            // Check verification
             const isVerified = await checkVerification(user.uid);
             if (!isVerified) {
                 alert('Please complete verification first.');
@@ -32,10 +26,8 @@ async function initializeDashboard() {
                 return;
             }
             
-            // Load user data and update UI
             await loadUserData(user.uid);
             
-            // Setup all functionality
             setupAllFeatures();
             
         } else {
@@ -70,8 +62,6 @@ async function loadUserData(userId) {
         if (userSnap.exists()) {
             const userData = userSnap.data();
             console.log('📋 User data loaded:', userData);
-            
-            // Update the dashboard UI with real user data
             updateDashboardUI(userData);
         } else {
             console.log('❌ No user data found in Firestore');
@@ -85,8 +75,6 @@ function updateDashboardUI(userData) {
     console.log('🎨 Updating dashboard UI with user data...');
     
     const userName = userData.name || 'Nutritionist';
-    
-    // Update header with real user name
     const userInfo = document.querySelector('.user-info');
     if (userInfo) {
         userInfo.innerHTML = `
@@ -97,8 +85,7 @@ function updateDashboardUI(userData) {
             <div class="user-avatar">${userName.charAt(0)}</div>
         `;
     }
-    
-    // Update settings form with real data
+
     const settingsForm = document.getElementById('settingsForm');
     if (settingsForm) {
         const nameInput = document.getElementById('fullName');
@@ -115,8 +102,7 @@ function updateDashboardUI(userData) {
 
 function setupAllFeatures() {
     console.log('⚙️ Setting up all features...');
-    
-    // Clear any demo data first
+
     clearDemoData();
     
     setupNavigation();
@@ -125,7 +111,6 @@ function setupAllFeatures() {
     setupButtons();
     setupLogout();
 
-    // Load pending requests
     loadPendingRequests();
     
     console.log('✅ All features setup complete');
@@ -133,8 +118,7 @@ function setupAllFeatures() {
 
 function clearDemoData() {
     console.log('🧹 Clearing demo data...');
-    
-    // Remove demo patients from the patients grid
+
     const patientsGrid = document.querySelector('#patients .patients-grid');
     if (patientsGrid) {
         patientsGrid.innerHTML = `
@@ -144,8 +128,7 @@ function clearDemoData() {
             </div>
         `;
     }
-    
-    // Clear demo chat messages but keep the structure
+
     const chatHistory = document.querySelector('.chat-history');
     if (chatHistory) {
         chatHistory.innerHTML = `
@@ -154,8 +137,7 @@ function clearDemoData() {
             </div>
         `;
     }
-    
-    // Update nutritionist status
+
     const nutritionistStatus = document.querySelector('.nutritionist-status');
     if (nutritionistStatus) {
         nutritionistStatus.innerHTML = `
@@ -166,7 +148,6 @@ function clearDemoData() {
     }
 }
 
-// 1. NAVIGATION
 function setupNavigation() {
     console.log('🔧 Setting up navigation...');
     
@@ -177,12 +158,10 @@ function setupNavigation() {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('📱 Navigation clicked:', this.getAttribute('data-section'));
-            
-            // Remove active from all
+
             menuItems.forEach(i => i.classList.remove('active'));
             sections.forEach(s => s.classList.remove('active'));
-            
-            // Add active to clicked
+
             this.classList.add('active');
             const targetId = this.getAttribute('data-section');
             const targetSection = document.getElementById(targetId);
@@ -193,7 +172,6 @@ function setupNavigation() {
     });
 }
 
-// 2. CHAT FUNCTIONALITY
 function setupChat() {
     console.log('🔧 Setting up chat...');
     
@@ -210,15 +188,13 @@ function setupChat() {
                 sendMessage();
             }
         });
-        
-        // Chat items
+
         const chatItems = document.querySelectorAll('.chat-item');
         chatItems.forEach(item => {
             item.addEventListener('click', function() {
                 chatItems.forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
-                
-                // Update chat header
+
                 const patientName = this.querySelector('h4').textContent;
                 const chatHistory = document.querySelector('.chat-history');
                 if (chatHistory) {
@@ -231,24 +207,21 @@ function setupChat() {
                 }
             });
         });
-        
-        // Video call button
+
         const videoCall = document.getElementById('video-call');
         if (videoCall) {
             videoCall.addEventListener('click', function() {
                 alert('Starting video call with patient...');
             });
         }
-        
-        // Attach image button
+
         const attachImage = document.getElementById('attach-image');
         if (attachImage) {
             attachImage.addEventListener('click', function() {
                 alert('Image attachment feature would open here');
             });
         }
-        
-        // Attach file button
+
         const attachFile = document.getElementById('attach-file');
         if (attachFile) {
             attachFile.addEventListener('click', function() {
@@ -271,7 +244,6 @@ function sendMessage() {
         `;
         
         if (messages) {
-            // If it's the no-messages placeholder, clear it first
             if (messages.querySelector('.no-messages')) {
                 messages.innerHTML = '';
             }
@@ -280,8 +252,6 @@ function sendMessage() {
         }
         
         input.value = '';
-        
-        // Simulate patient reply after 1 second
         setTimeout(() => {
             simulatePatientReply();
         }, 1000);
@@ -312,11 +282,8 @@ function simulatePatientReply() {
     }
 }
 
-// 3. FORMS
 function setupForms() {
     console.log('🔧 Setting up forms...');
-    
-    // In setupForms() function, replace the dietForm event listener with this:
 const dietForm = document.getElementById('dietPlanForm');
 if (dietForm) {
     dietForm.addEventListener('submit', async function(e) {
@@ -346,8 +313,6 @@ if (dietForm) {
 
         try {
             const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
-            
-            // Save diet plan to Firestore under the patient's ID
             await setDoc(doc(db, 'dietPlans', patientSelect.value), planData);
             
             alert(`Diet plan "${planName}" created successfully for patient!`);
@@ -359,7 +324,6 @@ if (dietForm) {
         }
     });
 }
-    // Settings Form
     const settingsForm = document.getElementById('settingsForm');
     if (settingsForm) {
         settingsForm.addEventListener('submit', async function(e) {
@@ -375,11 +339,7 @@ if (dietForm) {
 
             try {
                 const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
-                
-                // Update user data in Firestore
                 await updateDoc(doc(db, 'users', auth.currentUser.uid), formData);
-                
-                // Update UI with new name
                 updateDashboardUI(formData);
                 
                 alert('Profile updated successfully!');
@@ -392,19 +352,14 @@ if (dietForm) {
     }
 }
 
-// 4. BUTTONS
 function setupButtons() {
     console.log('🔧 Setting up buttons...');
-    
-    // Download Plan button
     const downloadBtn = document.getElementById('download-plan');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', function() {
             alert('Downloading diet plan as PDF...');
         });
     }
-    
-    // Book Session button
     const bookSession = document.getElementById('book-session');
     if (bookSession) {
         bookSession.addEventListener('click', function() {
@@ -412,7 +367,6 @@ function setupButtons() {
         });
     }
     
-    // Reschedule Session button
     const rescheduleBtn = document.getElementById('reschedule-session');
     if (rescheduleBtn) {
         rescheduleBtn.addEventListener('click', function() {
@@ -420,7 +374,6 @@ function setupButtons() {
         });
     }
     
-    // Write Review button
     const writeReviewBtn = document.getElementById('write-review-btn');
     if (writeReviewBtn) {
         writeReviewBtn.addEventListener('click', function() {
@@ -428,19 +381,16 @@ function setupButtons() {
         });
     }
     
-    // Load More Reviews button
     const loadMoreReviews = document.getElementById('load-more-reviews');
     if (loadMoreReviews) {
         loadMoreReviews.addEventListener('click', function() {
             alert('Loading more reviews...');
         });
     }
-    
-    // Patient action buttons (using event delegation)
+
     document.addEventListener('click', function(e) {
         const target = e.target;
         
-        // View Progress buttons
         if (target.classList.contains('btn') && !target.classList.contains('btn-outline') && target.textContent.includes('View Progress')) {
             e.preventDefault();
             const patientCard = target.closest('.patient-card');
@@ -449,7 +399,6 @@ function setupButtons() {
             switchToSection('progress');
         }
         
-        // Message buttons
         if (target.classList.contains('btn-outline') && target.textContent.includes('Message')) {
             e.preventDefault();
             const patientCard = target.closest('.patient-card');
@@ -458,7 +407,6 @@ function setupButtons() {
             switchToSection('messages');
         }
         
-        // Diet Plan buttons
         if (target.classList.contains('btn-outline') && target.textContent.includes('Diet Plan')) {
             e.preventDefault();
             const patientCard = target.closest('.patient-card');
@@ -470,7 +418,6 @@ function setupButtons() {
 }
 
 function switchToSection(sectionId) {
-    // Update navigation
     document.querySelectorAll('.sidebar-menu a').forEach(item => {
         item.classList.remove('active');
         if (item.getAttribute('data-section') === sectionId) {
@@ -478,7 +425,6 @@ function switchToSection(sectionId) {
         }
     });
     
-    // Update content
     document.querySelectorAll('.content-section').forEach(section => {
         section.classList.remove('active');
     });
@@ -489,11 +435,9 @@ function switchToSection(sectionId) {
     }
 }
 
-// 5. LOGOUT
 function setupLogout() {
     console.log('🔧 Setting up logout...');
     
-    // Add logout button to sidebar if not already there
     const sidebar = document.querySelector('.sidebar-menu');
     if (sidebar && !document.getElementById('logoutBtn')) {
         const logoutItem = document.createElement('li');
@@ -515,7 +459,6 @@ function setupLogout() {
     }
 }
 
-// Global functions for patient actions
 window.viewPatientProgress = function(patientId) {
     alert('Viewing progress for patient: ' + patientId);
     switchToSection('progress');
@@ -530,14 +473,12 @@ window.createDietPlan = function(patientId) {
     alert('Creating diet plan for patient: ' + patientId);
     switchToSection('diet-plans');
     
-    // Pre-select the patient in the diet plan form
     const patientSelect = document.getElementById('patientSelect');
     if (patientSelect) {
         patientSelect.value = patientId;
     }
 };
 
-// Initialize real-time patient updates
 async function setupRealTimePatients() {
     const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
     
@@ -549,7 +490,6 @@ async function setupRealTimePatients() {
         });
         updatePatientsDisplay(patients);
     });
-    // Load pending patient requests
 async function loadPendingRequests() {
     try {
         const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
@@ -589,24 +529,20 @@ async function loadPendingRequests() {
     }
 }
 
-// Approve patient request
 window.approvePatientRequest = async function(patientId, patientName) {
     try {
         const { doc, updateDoc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
         
-        // Update patient status to approved
         await updateDoc(doc(db, 'patients', patientId), {
             status: 'approved',
             assignmentStatus: 'approved',
             approvedAt: new Date().toISOString()
         });
         
-        // Remove from pending requests
         await deleteDoc(doc(db, 'nutritionists', auth.currentUser.uid, 'pendingRequests', patientId));
         
         alert(`Patient ${patientName} approved successfully!`);
         
-        // Reload the patients list
         setupRealTimePatients();
         loadPendingRequests();
         
@@ -616,23 +552,19 @@ window.approvePatientRequest = async function(patientId, patientName) {
     }
 };
 
-// Reject patient request
     window.rejectPatientRequest = async function(patientId) {
     try {
         const { doc, updateDoc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
         
-        // Update patient status to rejected
         await updateDoc(doc(db, 'patients', patientId), {
             status: 'rejected',
             assignmentStatus: 'rejected'
         });
         
-        // Remove from pending requests
         await deleteDoc(doc(db, 'nutritionists', auth.currentUser.uid, 'pendingRequests', patientId));
         
         alert('Patient request rejected.');
         
-        // Reload pending requests
         loadPendingRequests();
         
     } catch (error) {
@@ -649,7 +581,7 @@ function updatePatientsDisplay(patients) {
     patientsGrid.innerHTML = '';
 
     Object.entries(patients).forEach(([patientId, patientData]) => {
-        // Only show patients assigned to this nutritionist
+        
         if (patientData.assignedNutritionist === auth.currentUser.uid) {
             const initials = patientData.name ? patientData.name.split(' ').map(n => n[0]).join('') : 'PT';
             
@@ -689,8 +621,6 @@ function updatePatientsDisplay(patients) {
             patientsGrid.appendChild(patientCard);
         }
     });
-
-    // If no patients found
     if (patientsGrid.children.length === 0) {
         patientsGrid.innerHTML = `
             <div class="no-patients">
@@ -700,6 +630,4 @@ function updatePatientsDisplay(patients) {
         `;
     }
 }
-
-// Start real-time patient updates
 setupRealTimePatients();

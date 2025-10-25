@@ -191,7 +191,6 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Chatbot styles */
 #chatbot-container {
   position: fixed;
   bottom: 20px;

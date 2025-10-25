@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="patient.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script type="module">
-    // Import Firebase Firestore (not Realtime Database)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
@@ -23,7 +22,6 @@
         measurementId: "G-QFXFE3YF0R"
     };
 
-    // Initialize Firebase with Firestore
     const app = initializeApp(firebaseConfig);
     window.firebaseFirestore = getFirestore(app);
     window.firebaseAuth = getAuth(app);
@@ -32,7 +30,6 @@
 </script>
 </head>
 <body>
-    <!-- Header Section -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -40,24 +37,19 @@
                     <span>Smart-Diet</span>
                 </div>
                 <div class="user-info" id="user-info">
-                    <!-- Dynamic content will be inserted here -->
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
     <nav class="nav-tabs">
         <div class="container">
-            <div class="tabs" id="navigation-tabs">
-                <!-- Dynamic tabs will be inserted here -->
+            <div class="tabs" id="navigation-tabs">\
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container">
-        <!-- Diet Plan Section -->
         <section id="diet-plan" class="tab-content active">
             <div class="section-header">
                 <h2>Your Personalized Diet Plan</h2>
@@ -68,26 +60,21 @@
             </div>
 
             <div class="plan-period-selector" id="period-selector">
-                <!-- Dynamic period buttons will be inserted here -->
             </div>
 
             <div class="diet-plan-cards" id="meal-cards">
-                <!-- Dynamic meal cards will be inserted here -->
             </div>
         </section>
 
-        <!-- Chat Section -->
         <section id="chat" class="tab-content">
             <div class="section-header">
                 <h2>Chat with Nutritionist</h2>
                 <div class="nutritionist-status" id="nutritionist-status">
-                    <!-- Dynamic status will be inserted here -->
                 </div>
             </div>
 
             <div class="chat-container">
                 <div class="chat-history" id="chat-history">
-                    <!-- Dynamic chat messages will be inserted here -->
                 </div>
 
                 <div class="chat-input-container">
@@ -113,30 +100,25 @@
             </div>
         </section>
 
-        <!-- Progress Tracker Section -->
         <section id="progress" class="tab-content">
             <div class="section-header">
                 <h2>Your Progress</h2>
                 <div class="progress-summary" id="progress-summary">
-                    <!-- Dynamic progress summary will be inserted here -->
                 </div>
             </div>
 
             <div class="progress-content">
                 <div class="charts-container" id="progress-charts">
-                    <!-- Dynamic charts will be inserted here -->
                 </div>
 
                 <div class="achievements">
                     <h3>Your Achievements</h3>
                     <div class="badges-container" id="progress-badges">
-                        <!-- Dynamic badges will be inserted here -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Nutritionist Information Section -->
         <section id="nutritionist" class="tab-content">
             <div class="section-header">
                 <h2>Your Nutritionist</h2>
@@ -148,27 +130,22 @@
 
             <div class="nutritionist-profile">
                 <div class="profile-card" id="nutritionist-profile">
-                    <!-- Dynamic profile will be inserted here -->
                 </div>
 
                 <div class="nutritionist-sidebar">
                     <div class="next-session" id="next-session">
-                        <!-- Dynamic next session will be inserted here -->
                     </div>
 
                     <div class="review-section" id="review-section">
-                        <!-- Dynamic review section will be inserted here -->
                     </div>
                 </div>
             </div>
 
             <div class="reviews-section" id="reviews-section">
-                <!-- Dynamic reviews will be inserted here -->
             </div>
         </section>
     </main>
 
-    <!-- Include data first, then script -->
     <script src="data.js"></script>
     <script src="patient.js"></script>
     <script type="module" src="patient-simple.js"></script>

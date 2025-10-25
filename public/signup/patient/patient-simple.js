@@ -1,4 +1,3 @@
-// patient-simple.js - COMPLETE FIXED VERSION
 class SimplePatientApp {
     constructor() {
         this.data = appData;
@@ -12,7 +11,6 @@ class SimplePatientApp {
     async init() {
         console.log('🚀 Simple Patient App Initialized');
         
-        // Wait for Firebase to load
         setTimeout(() => {
             this.checkFirebaseAndInitialize();
         }, 100);
@@ -44,10 +42,8 @@ class SimplePatientApp {
                     this.useFirebase = true;
                     console.log('✅ Patient logged in:', user.email);
                     
-                    // Load patient data from Firestore
                     await this.loadPatientDataFromFirestore();
                     
-                    // Setup real-time listeners
                     this.setupFirebaseListeners();
                     
                     resolve();
@@ -66,7 +62,6 @@ class SimplePatientApp {
         try {
             const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
             
-            // Load patient data
             const patientRef = doc(window.firebaseFirestore, 'patients', this.currentUser.uid);
             const patientSnap = await getDoc(patientRef);
             
@@ -74,7 +69,6 @@ class SimplePatientApp {
                 this.currentPatientData = patientSnap.data();
                 console.log('✅ Patient data loaded:', this.currentPatientData);
                 
-                // Update UI with real data
                 this.updatePatientHeader();
                 this.renderAllSectionsWithFirebaseData();
             } else {
@@ -90,10 +84,8 @@ class SimplePatientApp {
     setupFirebaseListeners() {
         if (!this.useFirebase) return;
         
-        // Listen for diet plan updates
         this.setupDietPlanListener();
         
-        // Listen for patient data updates (like nutritionist approval)
         this.setupPatientDataListener();
     }
 
@@ -129,10 +121,8 @@ class SimplePatientApp {
                     this.currentPatientData = patientData;
                     console.log('👤 Patient data updated:', patientData);
                     
-                    // Update header with latest data
                     this.updatePatientHeader();
                     
-                    // Update nutritionist section
                     this.updateNutritionistSection();
                 }
             });
@@ -163,8 +153,7 @@ class SimplePatientApp {
     }
 
     renderAllSectionsWithFirebaseData() {
-        // Diet plan will be handled by real-time listener
-        this.renderChatFromDemo(); // You can implement Firebase chat later
+        this.renderChatFromDemo();
         this.renderProgressFromDemo();
         this.updateNutritionistSection();
     }
@@ -178,13 +167,11 @@ class SimplePatientApp {
         const nutritionistName = this.currentPatientData?.assignedNutritionistName || 'Not Assigned';
         const status = this.currentPatientData?.status || 'pending';
         
-        // Update chat header
         nutritionistStatus.innerHTML = `
             <i class="fas fa-circle"></i>
             <span>Your Nutritionist: ${nutritionistName} (${status})</span>
         `;
         
-        // Update nutritionist profile section
         if (this.currentPatientData?.assignedNutritionistName) {
             nutritionistProfile.innerHTML = `
                 <div class="profile-header">
@@ -222,7 +209,6 @@ class SimplePatientApp {
                 </div>
             `;
         } else {
-            // No nutritionist assigned
             nutritionistProfile.innerHTML = `
                 <div class="profile-header">
                     <div class="profile-avatar">?</div>
@@ -243,7 +229,6 @@ class SimplePatientApp {
         }
     }
 
-    // DIET PLAN - FIREBASE DATA
     renderDietPlanFromFirebase(dietPlan) {
         const mealCards = document.getElementById('meal-cards');
         if (!mealCards) return;
@@ -292,7 +277,6 @@ class SimplePatientApp {
         this.renderPeriodSelector();
     }
 
-    // Keep all your existing demo rendering methods as fallback
     renderDietPlanFromDemo() {
         const mealCards = document.getElementById('meal-cards');
         if (!mealCards) return;
@@ -342,7 +326,6 @@ class SimplePatientApp {
         const messages = this.data.chat.messages;
         const nutritionist = this.data.chat.nutritionist;
 
-        // Use real nutritionist name if available
         const realNutritionistName = this.currentPatientData?.assignedNutritionistName || nutritionist.name;
         
         nutritionistStatus.innerHTML = `
@@ -527,7 +510,6 @@ class SimplePatientApp {
     }
 
     async sendMessageToFirebase(messageText) {
-        // You can implement Firebase chat later
         console.log('Would send to Firebase:', messageText);
         this.addMessageToChat('patient', messageText);
         this.simulateNutritionistReply();
@@ -596,7 +578,6 @@ class SimplePatientApp {
             });
         }
 
-        // Book session button
         const bookSession = document.getElementById('book-session');
         if (bookSession) {
             bookSession.addEventListener('click', () => {
@@ -656,7 +637,6 @@ class SimplePatientApp {
     }
 }
 
-// Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new SimplePatientApp();
 });

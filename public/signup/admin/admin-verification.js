@@ -25,12 +25,10 @@ class AdminVerification {
 
     init() {
         this.loadNutritionists();
-        // Real-time updates
         this.setupRealTimeListener();
     }
 
     setupRealTimeListener() {
-        // Listen for real-time updates to users collection
         const usersRef = collection(db, 'users');
         onSnapshot(usersRef, (snapshot) => {
             this.loadNutritionists();
@@ -190,7 +188,6 @@ class AdminVerification {
     }
 }
 
-// Global functions for button clicks
 window.adminApprove = async function(userId) {
     if (confirm('Are you sure you want to approve this nutritionist?')) {
         try {
@@ -226,7 +223,6 @@ window.adminReject = async function(userId) {
     }
 };
 
-// View document in new window
 window.viewDocument = function(base64Data, fileName) {
     const newWindow = window.open();
     newWindow.document.write(`
@@ -249,7 +245,6 @@ window.viewDocument = function(base64Data, fileName) {
     `);
 };
 
-// Initialize admin panel
 document.addEventListener('DOMContentLoaded', () => {
     new AdminVerification();
 });

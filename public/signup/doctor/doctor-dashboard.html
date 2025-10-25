@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="doctor.css">
     
 <script type="module">
-    // Import Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
@@ -24,7 +23,6 @@
         measurementId: "G-QFXFE3YF0R"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     window.firebaseAuth = getAuth(app);
     window.firebaseFirestore = getFirestore(app);
@@ -32,6 +30,7 @@
     
     console.log('✅ Firebase initialized for nutritionist verification');
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <header>
@@ -54,13 +53,12 @@
                 <h2>Professional Certificate</h2>
                 <div class="upload-area" id="certificateUpload">
                     <i class="fas fa-file-certificate"></i>
-                    <h3>Upload Your Certificate</h3>
-                    <p>Supported formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <h3>Upload Your Certificate</h3> 
+                    <p>Supported formats: PDF, JPG, PNG (Max 100KB)</p>
                     <input type="file" id="certificateFile" class="file-input" accept=".pdf,.jpg,.png,.jpeg">
                     <label for="certificateFile" class="file-label">Choose File</label>
                 </div>
                 <div class="uploaded-files" id="certificateFiles">
-                    <!-- Uploaded certificate files will appear here -->
                 </div>
             </div>
             
@@ -69,12 +67,11 @@
                 <div class="upload-area" id="governmentIdUpload">
                     <i class="fas fa-id-card"></i>
                     <h3>Upload Government ID</h3>
-                    <p>Supported formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <p>Supported formats: PDF, JPG, PNG (Max 100KB)</p>
                     <input type="file" id="governmentIdFile" class="file-input" accept=".pdf,.jpg,.png,.jpeg">
                     <label for="governmentIdFile" class="file-label">Choose File</label>
                 </div>
                 <div class="uploaded-files" id="governmentIdFiles">
-                    <!-- Uploaded government ID files will appear here -->
                 </div>
             </div>
             
@@ -83,12 +80,11 @@
                 <div class="upload-area" id="medicalIdUpload">
                     <i class="fas fa-stethoscope"></i>
                     <h3>Upload Medical ID</h3>
-                    <p>Supported formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <p>Supported formats: PDF, JPG, PNG (Max 100KB)</p>
                     <input type="file" id="medicalIdFile" class="file-input" accept=".pdf,.jpg,.png,.jpeg">
                     <label for="medicalIdFile" class="file-label">Choose File</label>
                 </div>
                 <div class="uploaded-files" id="medicalIdFiles">
-                    <!-- Uploaded medical ID files will appear here -->
                 </div>
             </div>
             
@@ -107,8 +103,6 @@
             <a href="#">Contact Us</a>
         </div>
     </footer>
-
-    <!-- Load doctor.js as a module -->
     <script type="module" src="doctor.js"></script>
 </body>
 </html>

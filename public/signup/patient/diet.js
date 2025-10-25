@@ -1,4 +1,4 @@
-const API_KEY = "dd112c91acc5467ea95d20a0fd8f8bad"; // replace with your key
+const API_KEY = "dd112c91acc5467ea95d20a0fd8f8bad";
 let userProfile = null;
 
 document.getElementById("user-form").addEventListener("submit", (e) => {
@@ -41,13 +41,11 @@ document.getElementById("ask-btn").addEventListener("click", async () => {
       return;
     }
 
-    // Pick a meal matching the user’s requested type (or default to first)
     let selectedMeal =
       data.meals.find((m) =>
         m.title.toLowerCase().includes(mealType.toLowerCase())
       ) || data.meals[0];
 
-    // Fetch meal details to get image + ingredients
     const detailsUrl = `https://api.spoonacular.com/recipes/${selectedMeal.id}/information?apiKey=${API_KEY}`;
     const detailsRes = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(detailsUrl)}`);
     const mealDetails = await detailsRes.json();

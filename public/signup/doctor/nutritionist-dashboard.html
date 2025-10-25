@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="nutrition.css">
 
 <script type="module">
-    // Import Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
@@ -24,7 +23,6 @@
         measurementId: "G-QFXFE3YF0R"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     window.firebaseFirestore = getFirestore(app);
     window.firebaseAuth = getAuth(app);
@@ -39,10 +37,9 @@
         </div>
         <div class="user-info">
             <div class="user-avatar">ND</div>
-            <!-- To this -->
             <div class="user-details">
                <h3>Nutritionist Dashboard</h3>
-               <p>Loading...</p> <!-- This will be updated by JavaScript -->
+               <p>Loading...</p>
             </div>
         </div>
     </header>
@@ -60,11 +57,8 @@
         </div>
 
         <div class="main-content">
-            <!-- Dashboard Section -->
             <div class="content-section active" id="dashboard">
                 <h2 class="section-title">Dashboard Overview</h2>
-                <!-- Add this to the Dashboard Section -->
-    <!-- Add Notification Alert -->
     <div class="notification-alert" id="pending-requests-alert" style="display: none;">
         <div class="alert-content">
             <i class="fas fa-bell"></i>
@@ -74,10 +68,7 @@
     </div>
     
     <div class="stats-grid">
-        <!-- Your existing stats cards -->
     </div>
-    
-    <!-- Rest of your dashboard content -->
 </div>
                 
                 <div class="stats-grid">
@@ -166,27 +157,18 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Patients Section -->
-           <!-- Patients Section -->
 <div class="content-section" id="patients">
     <h2 class="section-title">My Patients</h2>
-    
-    <!-- Add this pending requests section -->
     <div class="pending-requests-section">
         <h3>Pending Patient Requests</h3>
         <div id="pending-requests" class="pending-requests-container">
-            <!-- Pending requests will be loaded here -->
         </div>
     </div>
     
     <h3>Approved Patients</h3>
     <div class="patients-grid">
-        <!-- Patient cards will be loaded here -->
     </div>
 </div>
-
-            <!-- Diet Plans Section -->
             <div class="content-section" id="diet-plans">
                 <h2 class="section-title">Create Diet Plan</h2>
                 <div class="diet-plans-container">
@@ -234,8 +216,6 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Messages Section -->
             <div class="content-section" id="messages">
                 <h2 class="section-title">Patient Communication</h2>
                 <div class="chat-container">
@@ -293,8 +273,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Progress Tracking Section -->
             <div class="content-section" id="progress">
                 <h2 class="section-title">Patient Progress Tracking</h2>
                 <div class="progress-container">
@@ -362,8 +340,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Settings Section -->
             <div class="content-section" id="settings">
                 <h2 class="section-title">Account Settings</h2>
                 <div class="diet-plans-container">
@@ -392,8 +368,6 @@
             </div>
         </div>
     </div>
-
-    <!-- At the end of body, before closing </body> tag -->
     <script type="module" src="nutritionist.js"></script>
 </body>
 </html>
