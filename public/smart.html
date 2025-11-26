@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Diet - Eat Healthy, Live Better</title>
+  <link rel="stylesheet" href="smart.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <h1><pre>S M A R T  D I E T</pre></h1>
+    <p>Eat Healthy • Live Better</p>
+    
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#contact">Contact</a>
+      <a href="food-scanner.html">Food Scanner</a>
+      <a href="community-hub.html">Community Hub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Personalized Diet Plans for You</h2>
+    <p>𝗧𝗿𝗮𝗰𝗸 𝗰𝗮𝗹𝗼𝗿𝗶𝗲𝘀, 𝗱𝗶𝘀𝗰𝗼𝘃𝗲𝗿 𝗵𝗲𝗮𝗹𝘁𝗵𝘆 𝗿𝗲𝗰𝗶𝗽𝗲𝘀, 𝗮𝗻𝗱 𝘀𝘁𝗮𝘆 𝗳𝗶𝘁 𝘄𝗶𝘁𝗵 𝗲𝗮𝘀𝗲..</p>
+    <button onclick="getStarted()">Get Started</button>
+  </section>
+
+  <section id="features" class="features-section">
+    <h2 class="features-title">Features</h2>
+
+    <div class="features-grid">
+      <div class="card">
+        <span class="icon">🍎</span>
+        <h3>Personalized Diet</h3>
+        <p>Meal plans tailored to your lifestyle and health goals.</p>
+      </div>
+
+      <div class="card">
+        <span class="icon">🔥</span>
+        <h3>Calorie Tracker</h3>
+        <p>Track daily calorie intake with ease and accuracy.</p>
+      </div>
+
+      <div class="card">
+        <span class="icon">🥗</span>
+        <h3>Healthy Recipes</h3>
+        <p>Discover simple, nutritious, and delicious recipes.</p>
+      </div>
+
+      <div class="card">
+        <span class="icon">📸</span>
+        <h3>Food Scanner</h3>
+        <p>Snap a meal photo and get instant calorie analysis.</p>
+      </div>
+
+      <div class="card">
+        <span class="icon">👥</span>
+        <h3>Community Hub</h3>
+        <p>Share your meals, chat, and stay motivated together.</p>
+      </div>
+
+      <div class="card">
+        <span class="icon">🤖</span>
+        <h3>AI Suggestions</h3>
+        <p>Smart recommendations for healthier food choices.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="recipes">
+    <h2 style="text-align:center;">Popular Diet Recipes</h2>
+    <div class="recipes">
+      <div class="card">
+        <img src="signup/user/images/salad.jpg" alt="Salad">
+        <h3>Fresh Salad</h3>
+        <p>120 Calories • Low Carb</p>
+        <button></button>
+      </div>
+      <div class="card">
+        <img src="signup/user/images/smoothie.jpg" alt="Smoothie">
+        <h3>Green Smoothie</h3>
+        <p>90 Calories • Detox</p>
+        <button></button>
+      </div>
+      <div class="card">
+        <img src="signup/user/images/finalrec.png" alt="">
+        <h3>Diet Recipes</h3>
+        <p>Calories • Protein Rich</p>
+        <div class="button">
+          <a href="signup/user/recipes.html"> Recipes </a>
+        </div>
+      </div> 
+    </div> 
+  </section>
+
+  <section id="testimonials">
+    <h2 style="text-align:center;">What Our Users Say</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>"This app completely changed my eating habits. Highly recommend!"</p>
+        <strong>- Priya</strong>
+      </div>
+      <div class="testimonial">
+        <p>"I lost 8kgs in 2 months using the personalized plans. Amazing!"</p>
+        <strong>- Rahul</strong>
+      </div>
+      <div class="testimonial">
+        <p>"The recipes are delicious and easy to make. Love it!"</p>
+        <strong>- Neha</strong>
+      </div>
+    </div>
+  </section>
+
+
+  <div id="chatbot-button">
+    <img src="signup/user/images/chatbot.png" alt="chatbot">
+  </div>
+
+  <div id="chatbot-container">
+    <div id="chatbot-header">
+      <h3>Diet Assistant</h3>
+      <button id="chatbot-close">×</button>
+    </div>
+    <div id="chatbot-messages">
+      <div class="message bot-message">Hello! I'm your diet assistant. How can I help you with your nutrition questions today?</div>
+    </div>
+    <div id="chatbot-input">
+      <input type="text" id="chatbot-user-input" placeholder="Ask me about diet, nutrition...">
+      <button id="chatbot-send">Send</button>
+    </div>
+  </div>
+
+  <footer id="contact">
+    <p>Stay Connected with Us</p>
+    <a href="#">Instagram</a> | 
+    <a href="#">Twitter</a>
+    <p style="margin-top:10px;">&copy; 2025 Smart Diet. All rights reserved.</p>
+  </footer>
+
+  <script src="smart.js"></script>
+  <script src="signup/user/bot.js"></script>
+</body>
+</html>
